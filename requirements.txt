@@ -1,0 +1,6 @@
+Configuracions de:
+- ShippingInterface: Envíos: parametrizar o transporte
+- ProductFeatures: Configurar os filtros de búsqueda nas categorías (tipo módulo Advanced Seach de Presta)
+- PaymentGatewayInterface: gestión de formas de pago
+- Descontos ou promocions
+- Configurar emails de estados de pedidos

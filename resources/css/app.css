@@ -1,0 +1,224 @@
+@import 'swiper/css/bundle';
+@import 'tailwindcss';
+@import "./filament_colors.css";
+
+/* latin-ext */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next';
+    font-style: italic;
+    font-weight: 200 800;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/atkinsonhyperlegiblenext/v3/NaPPcYPdHfdVxJw0IfIP0lvYFqijb-UxCtm5_wdGseiMr3a-oXZ-.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next';
+    font-style: italic;
+    font-weight: 200 800;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/atkinsonhyperlegiblenext/v3/NaPPcYPdHfdVxJw0IfIP0lvYFqijb-UxCtm5_wdGseiMr3i-oQ.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/atkinsonhyperlegiblenext/v3/NaPNcYPdHfdVxJw0IfIP0lvYFqijb-UxCtm5_wdGseiHn3qmpQ.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/atkinsonhyperlegiblenext/v3/NaPNcYPdHfdVxJw0IfIP0lvYFqijb-UxCtm5_wdGseiJn3o.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+html {
+    font-family: "Atkinson Hyperlegible Next", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.main-content {
+    transition: margin-left 0.3s, margin-right 0.3s;
+}
+
+.main-content.expanded-left {
+    margin-left: 150px;
+}
+
+.main-content.expanded-right {
+    margin-right: 150px;
+}
+
+/* Scrollbar styles */
+.scrollbar-thin {
+    scrollbar-width: thin;
+}
+
+.scrollbar-thumb-blue-500 {
+    scrollbar-color: #4299e1 #edf2f7;
+}
+
+.scrollbar-track-primary-100 {
+    scrollbar-color: #edf2f7 #edf2f7;
+}
+
+.scrollbar-thumb-blue-500::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollbar-thumb-blue-500::-webkit-scrollbar-thumb {
+    background-color: #4299e1;
+    border-radius: 10px;
+}
+
+.scrollbar-track-primary-100::-webkit-scrollbar-track {
+    background-color: #edf2f7;
+}
+
+#product-long-description li {
+    margin-left: 1.5em;
+    display: list-item;
+    list-style-type: "✅";
+    padding-inline-start: 1ch;
+}
+
+#applied-filters-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#applied-filters-list li {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+}
+
+#applied-filters-list li .remove-filter {
+    margin-left: 10px;
+    cursor: pointer;
+    color: red;
+}
+
+#filter-side-menu:focus,
+#filter-side-menu:hover,
+#filter-side-menu:active {
+    outline: 2px solid grey;
+}
+
+.form-select:focus,
+input[type="range"]:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+}
+
+/* Range color firefox */
+input[type="range"]::-moz-range-thumb {
+    background-color: #ff4444;
+}
+
+#min_price::-moz-range-progress {
+    background-color: lightcoral;
+}
+
+#min_price::-moz-range-track {
+    background-color: red;
+}
+
+#max_price::-moz-range-progress {
+    background-color: red;
+}
+
+#max_price::-moz-range-track {
+    background-color: lightcoral;
+}
+
+/* Range color IE*/
+input[type="range"]::-webkit-slider-thumb {
+    background-color: #ff4444;
+}
+
+#min_price::-ms-fill-lower {
+    background-color: lightcoral;
+}
+
+#min_price::-ms-fill-upper {
+    background-color: red;
+}
+
+#min_price::-ms-fill-lower {
+    background-color: red;
+}
+
+#min_price::-ms-fill-upper {
+    background-color: lightcoral;
+}
+
+#filter-side-menu.open {
+    transform: translateX(-100%);
+}
+
+#product-short-description h3 {
+    font-weight: 700;
+    font-size: var(--text-lg);
+    /* 1.125rem (18px) */
+    line-height: var(--text-lg--line-height);
+    /* calc(1.75 / 1.125) */
+}
+
+#product-short-description li {
+    display: flex;
+    margin-bottom: 1px;
+}
+
+#product-short-description li:before {
+    content: '✓';
+    margin-right: 2px;
+    color: #228B22;
+}
+
+button {
+    @apply active:translate-x-1 active:translate-y-1 transition;
+}
+
+button:disabled {
+    @apply active:translate-x-0 active:translate-y-0;
+}
+
+
+/* CSS Code */
+.swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+}
+
+.swiper-pagination-bullet {
+    display: none;
+}

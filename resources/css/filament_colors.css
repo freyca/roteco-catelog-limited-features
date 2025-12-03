@@ -1,0 +1,123 @@
+@layer utilities {
+    /* List of all Filament color groups */
+    /* Each group has shades 50-900 */
+    /* This generates background and text classes with hover/focus variants */
+
+    /* PRIMARY */
+    .bg-primary { background-color: var(--primary-500); }
+    .text-primary { color: var(--primary-500); }
+    .bg-primary-50 { background-color: var(--primary-50); }
+    .bg-primary-100 { background-color: var(--primary-100); }
+    .bg-primary-200 { background-color: var(--primary-200); }
+    .bg-primary-300 { background-color: var(--primary-300); }
+    .bg-primary-400 { background-color: var(--primary-400); }
+    .bg-primary-500 { background-color: var(--primary-500); }
+    .bg-primary-600 { background-color: var(--primary-600); }
+    .bg-primary-700 { background-color: var(--primary-700); }
+    .bg-primary-800 { background-color: var(--primary-800); }
+    .bg-primary-900 { background-color: var(--primary-900); }
+
+    .text-primary-50 { color: var(--primary-50); }
+    .text-primary-100 { color: var(--primary-100); }
+    .text-primary-200 { color: var(--primary-200); }
+    .text-primary-300 { color: var(--primary-300); }
+    .text-primary-400 { color: var(--primary-400); }
+    .text-primary-500 { color: var(--primary-500); }
+    .text-primary-600 { color: var(--primary-600); }
+    .text-primary-700 { color: var(--primary-700); }
+    .text-primary-800 { color: var(--primary-800); }
+    .text-primary-900 { color: var(--primary-900); }
+
+    /* Generate hover/focus for all shades */
+    .hover\:bg-primary-50:hover { background-color: var(--primary-50); }
+    .hover\:bg-primary-100:hover { background-color: var(--primary-100); }
+    .hover\:bg-primary-200:hover { background-color: var(--primary-200); }
+    .hover\:bg-primary-300:hover { background-color: var(--primary-300); }
+    .hover\:bg-primary-400:hover { background-color: var(--primary-400); }
+    .hover\:bg-primary-500:hover { background-color: var(--primary-500); }
+    .hover\:bg-primary-600:hover { background-color: var(--primary-600); }
+    .hover\:bg-primary-700:hover { background-color: var(--primary-700); }
+    .hover\:bg-primary-800:hover { background-color: var(--primary-800); }
+    .hover\:bg-primary-900:hover { background-color: var(--primary-900); }
+
+    .hover\:text-primary-50:hover { color: var(--primary-50); }
+    .hover\:text-primary-100:hover { color: var(--primary-100); }
+    .hover\:text-primary-200:hover { color: var(--primary-200); }
+    .hover\:text-primary-300:hover { color: var(--primary-300); }
+    .hover\:text-primary-400:hover { color: var(--primary-400); }
+    .hover\:text-primary-500:hover { color: var(--primary-500); }
+    .hover\:text-primary-600:hover { color: var(--primary-600); }
+    .hover\:text-primary-700:hover { color: var(--primary-700); }
+    .hover\:text-primary-800:hover { color: var(--primary-800); }
+    .hover\:text-primary-900:hover { color: var(--primary-900); }
+
+    /* Repeat the same structure for gray, danger, success, info, warning */
+    /* Example for danger: */
+    .bg-danger { background-color: var(--danger-500); }
+    .text-danger { color: var(--danger-500); }
+    .hover\:bg-danger:hover { background-color: var(--danger-700); }
+    .hover\:text-danger:hover { color: var(--danger-700); }
+
+    /* Info */
+    .bg-info { background-color: var(--info-500); }
+    .text-info { color: var(--info-500); }
+    .hover\:bg-info:hover { background-color: var(--info-700); }
+    .hover\:text-info:hover { color: var(--info-700); }
+
+    /* Success */
+    .bg-success { background-color: var(--success-500); }
+    .text-success { color: var(--success-500); }
+    .hover\:bg-success:hover { background-color: var(--success-700); }
+    .hover\:text-success:hover { color: var(--success-700); }
+
+    /* Warning */
+    .bg-warning { background-color: var(--warning-500); }
+    .text-warning { color: var(--warning-500); }
+    .hover\:bg-warning:hover { background-color: var(--warning-700); }
+    .hover\:text-warning:hover { color: var(--warning-700); }
+
+    /* Gray shades (50-900) and hover */
+    .bg-gray-50 { background-color: var(--gray-50); }
+    .bg-gray-100 { background-color: var(--gray-100); }
+    .bg-gray-200 { background-color: var(--gray-200); }
+    .bg-gray-300 { background-color: var(--gray-300); }
+    .bg-gray-400 { background-color: var(--gray-400); }
+    .bg-gray-500 { background-color: var(--gray-500); }
+    .bg-gray-600 { background-color: var(--gray-600); }
+    .bg-gray-700 { background-color: var(--gray-700); }
+    .bg-gray-800 { background-color: var(--gray-800); }
+    .bg-gray-900 { background-color: var(--gray-900); }
+
+    .text-gray-50 { color: var(--gray-50); }
+    .text-gray-100 { color: var(--gray-100); }
+    .text-gray-200 { color: var(--gray-200); }
+    .text-gray-300 { color: var(--gray-300); }
+    .text-gray-400 { color: var(--gray-400); }
+    .text-gray-500 { color: var(--gray-500); }
+    .text-gray-600 { color: var(--gray-600); }
+    .text-gray-700 { color: var(--gray-700); }
+    .text-gray-800 { color: var(--gray-800); }
+    .text-gray-900 { color: var(--gray-900); }
+
+    .hover\:bg-gray-50:hover { background-color: var(--gray-50); }
+    .hover\:bg-gray-100:hover { background-color: var(--gray-100); }
+    .hover\:bg-gray-200:hover { background-color: var(--gray-200); }
+    .hover\:bg-gray-300:hover { background-color: var(--gray-300); }
+    .hover\:bg-gray-400:hover { background-color: var(--gray-400); }
+    .hover\:bg-gray-500:hover { background-color: var(--gray-500); }
+    .hover\:bg-gray-600:hover { background-color: var(--gray-600); }
+    .hover\:bg-gray-700:hover { background-color: var(--gray-700); }
+    .hover\:bg-gray-800:hover { background-color: var(--gray-800); }
+    .hover\:bg-gray-900:hover { background-color: var(--gray-900); }
+
+    .hover\:text-gray-50:hover { color: var(--gray-50); }
+    .hover\:text-gray-100:hover { color: var(--gray-100); }
+    .hover\:text-gray-200:hover { color: var(--gray-200); }
+    .hover\:text-gray-300:hover { color: var(--gray-300); }
+    .hover\:text-gray-400:hover { color: var(--gray-400); }
+    .hover\:text-gray-500:hover { color: var(--gray-500); }
+    .hover\:text-gray-600:hover { color: var(--gray-600); }
+    .hover\:text-gray-700:hover { color: var(--gray-700); }
+    .hover\:text-gray-800:hover { color: var(--gray-800); }
+    .hover\:text-gray-900:hover { color: var(--gray-900); }
+  }
