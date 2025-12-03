@@ -54,7 +54,6 @@ class Order extends Model
 
     protected $dispatchesEvents = [
         'created' => OrderCreated::class,
-        'saved' => OrderSaved::class,
     ];
 
     protected $keyType = 'string';
