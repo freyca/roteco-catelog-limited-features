@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Disassembly;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->integer('price');
             $table->integer('price_with_discount')->nullable();
+            $table->foreignIdFor(Disassembly::class)->constrained();
             // $table->integer('price_when_user_owns_product')->nullable();
             $table->boolean('published')->default(false)->index();
             // $table->unsignedInteger('stock');
