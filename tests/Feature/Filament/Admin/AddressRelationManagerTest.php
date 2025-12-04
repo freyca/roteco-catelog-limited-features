@@ -1,0 +1,151 @@
+<?php
+
+use App\Enums\AddressType;
+use App\Filament\Admin\Resources\Users\Users\Pages\EditUser;
+use App\Filament\Admin\Resources\Users\Users\RelationManagers\AddressRelationManager;
+use App\Models\Address;
+use App\Models\User;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
+
+uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    test()->admin = User::factory()->admin()->create([
+        'email' => 'admin@example.com',
+    ]);
+    test()->customer = User::factory()->create([
+        'email' => 'customer@example.com',
+        'name' => 'John',
+        'surname' => 'Doe',
+    ]);
+    test()->actingAs(test()->admin);
+});
+
+it('admin can create address through relation manager', function () {
+    $customer = test()->customer;
+
+    Livewire::test(AddressRelationManager::class, [
+        'ownerRecord' => $customer,
+        'pageClass' => EditUser::class,
+    ])
+        ->callTableAction(CreateAction::class, data: [
+            'name' => 'Shipping John',
+            'surname' => 'Doe',
+            'address_type' => AddressType::Shipping->value,
+            'bussiness_name' => 'Business Inc',
+            'financial_number' => 'B87654321',
+            'phone' => '34911111111',
+            'email' => 'shipping@example.com',
+            'address' => '789 Admin Street',
+            'city' => 'Valencia',
+            'state' => 'Valencia',
+            'zip_code' => '46001',
+            'country' => 'Spain',
+        ])
+        ->assertHasNoTableActionErrors();
+
+    expect(Address::count())->toBe(1);
+    $address = Address::first();
+    expect($address->user_id)->toBe($customer->id);
+    expect($address->name)->toBe('Shipping John');
+    expect($address->email)->toBe('shipping@example.com');
+});
+
+it('admin can edit address through relation manager', function () {
+    $customer = test()->customer;
+    $address = Address::factory()->for($customer)->create([
+        'city' => 'Madrid',
+        'address' => 'Old Street',
+    ]);
+
+    Livewire::test(AddressRelationManager::class, [
+        'ownerRecord' => $customer,
+        'pageClass' => EditUser::class,
+    ])
+        ->callTableAction(EditAction::class, $address, data: [
+            'city' => 'Barcelona',
+            'address' => 'New Street',
+        ])
+        ->assertHasNoTableActionErrors();
+
+    expect($address->fresh()->city)->toBe('Barcelona');
+    expect($address->fresh()->address)->toBe('New Street');
+});
+
+it('admin can delete address through relation manager', function () {
+    $customer = test()->customer;
+    $address = Address::factory()->for($customer)->create();
+
+    Livewire::test(AddressRelationManager::class, [
+        'ownerRecord' => $customer,
+        'pageClass' => EditUser::class,
+    ])
+        ->callTableAction(DeleteAction::class, $address)
+        ->assertHasNoTableActionErrors();
+
+    expect($address->fresh()->trashed())->toBeTrue();
+});
+
+it('validates required fields in create action', function () {
+    $customer = test()->customer;
+
+    Livewire::test(AddressRelationManager::class, [
+        'ownerRecord' => $customer,
+        'pageClass' => EditUser::class,
+    ])
+        ->callTableAction(CreateAction::class, data: [
+            'name' => '',
+            'surname' => '',
+            'address_type' => '',
+            'phone' => '',
+            'email' => '',
+            'address' => '',
+            'city' => '',
+            'state' => '',
+            'zip_code' => '',
+            'country' => '',
+        ])
+        ->assertHasTableActionErrors([
+            'name' => ['required'],
+            'surname' => ['required'],
+            'address_type' => ['required'],
+            'phone' => ['required'],
+            'email' => ['required'],
+            'address' => ['required'],
+            'city' => ['required'],
+            'state' => ['required'],
+            'zip_code' => ['required'],
+            'country' => ['required'],
+        ]);
+});
+
+it('can create address with optional fields empty', function () {
+    $customer = test()->customer;
+
+    Livewire::test(AddressRelationManager::class, [
+        'ownerRecord' => $customer,
+        'pageClass' => EditUser::class,
+    ])
+        ->callTableAction(CreateAction::class, data: [
+            'name' => 'Billing John',
+            'surname' => 'Doe',
+            'address_type' => AddressType::Billing->value,
+            'phone' => '34922222222',
+            'email' => 'billing@example.com',
+            'address' => '321 Admin Avenue',
+            'city' => 'Seville',
+            'state' => 'Andalusia',
+            'zip_code' => '41001',
+            'country' => 'Spain',
+        ])
+        ->assertHasNoTableActionErrors();
+
+    expect(Address::count())->toBe(1);
+    $address = Address::first();
+    expect($address->bussiness_name)->toBeNull();
+    expect($address->financial_number)->toBeNull();
+});

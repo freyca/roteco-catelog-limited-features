@@ -16,6 +16,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class AddressRelationManager extends RelationManager
 {
@@ -23,29 +24,40 @@ class AddressRelationManager extends RelationManager
 
     public function form(Schema $schema): Schema
     {
+        $user = $this->ownerRecord;
+
         return $schema
             ->components([
                 TextInput::make('name')
                     ->label(__('Name'))
                     ->required()
+                    ->default($user->name)
                     ->maxLength(255),
                 TextInput::make('surname')
                     ->label(__('Surname'))
                     ->required()
+                    ->default($user->surname)
                     ->maxLength(255),
                 Select::make('address_type')
                     ->label(__('Address type'))
                     ->required()
                     ->options(AddressType::class),
                 TextInput::make('bussiness_name')
-                    ->label(__('Business Name').'(optional)')
+                    ->label(__('Business Name') . ' (' . __('optional') . ')')
                     ->maxLength(255),
                 TextInput::make('financial_number')
-                    ->label(__('Financial Number').'(optional)')
+                    ->label(__('Financial Number') . ' (' . __('optional') . ')')
                     ->maxLength(255),
                 TextInput::make('phone')
                     ->label(__('Phone'))
-                    ->integer()
+                    ->required()
+                    ->tel()
+                    ->maxLength(255),
+                TextInput::make('email')
+                    ->label(__('Email'))
+                    ->required()
+                    ->email()
+                    ->default($user->email)
                     ->maxLength(255),
                 TextInput::make('address')
                     ->label(__('Address'))
@@ -86,11 +98,14 @@ class AddressRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                CreateAction::make(),
+                CreateAction::make()
+                    ->label(__('Create') . ' ' . __('address')),
             ])
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()
+                    ->label(__('Edit')),
+                DeleteAction::make()
+                    ->label(__('Delete')),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -10,11 +10,4 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateAddress extends CreateRecord
 {
     protected static string $resource = AddressResource::class;
-
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['email'] = auth()->user()->email;
-
-        return $data;
-    }
 }
