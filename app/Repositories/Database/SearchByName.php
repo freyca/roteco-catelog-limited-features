@@ -22,9 +22,9 @@ class SearchByName
         // Return empty array allows the hability to do not display the div
         // from the view without inspecting the array elements
         if (
-            $results['products']->count() === 0 &&
-            $results['complements']->count() === 0 &&
-            $results['spare-parts']->count() === 0
+            $results['products']->count() === 0 // &&
+            // $results['complements']->count() === 0 &&
+            // $results['spare-parts']->count() === 0
         ) {
             return [];
         }
