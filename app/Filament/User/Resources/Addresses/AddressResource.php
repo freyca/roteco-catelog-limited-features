@@ -54,10 +54,10 @@ class AddressResource extends Resource
                     ->required()
                     ->options(AddressType::class),
                 TextInput::make('bussiness_name')
-                    ->label(__('Business Name') . ' (' . __('optional') . ')')
+                    ->label(__('Business Name').' ('.__('optional').')')
                     ->maxLength(255),
                 TextInput::make('financial_number')
-                    ->label(__('Financial Number') . ' (' . __('optional') . ')')
+                    ->label(__('Financial Number').' ('.__('optional').')')
                     ->maxLength(255),
                 TextInput::make('phone')
                     ->label(__('Phone'))

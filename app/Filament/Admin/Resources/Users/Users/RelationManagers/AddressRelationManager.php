@@ -16,7 +16,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 
 class AddressRelationManager extends RelationManager
 {
@@ -43,10 +42,10 @@ class AddressRelationManager extends RelationManager
                     ->required()
                     ->options(AddressType::class),
                 TextInput::make('bussiness_name')
-                    ->label(__('Business Name') . ' (' . __('optional') . ')')
+                    ->label(__('Business Name').' ('.__('optional').')')
                     ->maxLength(255),
                 TextInput::make('financial_number')
-                    ->label(__('Financial Number') . ' (' . __('optional') . ')')
+                    ->label(__('Financial Number').' ('.__('optional').')')
                     ->maxLength(255),
                 TextInput::make('phone')
                     ->label(__('Phone'))
@@ -99,7 +98,7 @@ class AddressRelationManager extends RelationManager
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->label(__('Create') . ' ' . __('address')),
+                    ->label(__('Create').' '.__('address')),
             ])
             ->recordActions([
                 EditAction::make()

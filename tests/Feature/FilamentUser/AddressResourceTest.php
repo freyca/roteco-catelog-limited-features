@@ -140,6 +140,6 @@ it('user_cannot_access_another_users_address', function () {
     expect($userAddresses)->toHaveCount(1);
     expect($userAddresses->first()->id)->toBe($myAddress->id);
 
-    expect(fn() => Livewire::test(EditAddress::class, ['record' => $otherAddress->id]))
+    expect(fn () => Livewire::test(EditAddress::class, ['record' => $otherAddress->id]))
         ->toThrow(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
 });
