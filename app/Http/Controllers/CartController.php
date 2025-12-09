@@ -15,7 +15,7 @@ class CartController extends Controller
         return view('pages.cart', [
             'seotags' => new SeoTags('noindex'),
             'breadcrumbs' => new StandardPageBreadCrumbs([
-                __('Cart') => route('checkout.cart'), // @phpstan-ignore-line
+                __('Cart') => route('checkout.cart'),
             ]),
         ]);
     }

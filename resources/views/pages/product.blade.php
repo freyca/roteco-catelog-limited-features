@@ -26,10 +26,6 @@
 
         {{--
         <div class="container mx-auto my-6">
-            @if (isset($featureValues) && !is_null($featureValues) && count($featureValues) > 0)
-                @livewire('product.product-feature-container', ['features' => $features, 'featureValues' => $featureValues])
-            @endif
-
             <div class="flex justify-center items-center">
                 <h3 class="text-center my-6 bg-primary-800 p-4 rounded-xl max-w-2xl">
                     <span class="font-bold text-lg text-primary-100">

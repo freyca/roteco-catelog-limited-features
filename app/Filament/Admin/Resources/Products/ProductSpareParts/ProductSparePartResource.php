@@ -51,16 +51,6 @@ class ProductSparePartResource extends Resource
                     ]),
 
                 self::priceSectionWithParentProduct(),
-
-                // self::dimensionsSection(),
-
-                // self::featuresSection(),
-
-                // self::relatedProductsSection(),
-
-                // self::textsSection(),
-
-                // self::imagesSection(),
             ]);
     }
 

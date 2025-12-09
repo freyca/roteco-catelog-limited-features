@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Casts\MoneyCast;
 use App\Events\ProductDeleted;
 use App\Models\Scopes\PublishedScope;
 use Database\Factories\ProductFactory;
@@ -32,16 +31,9 @@ class Product extends BaseProduct
     {
         $this->mergeFillable([
             'category_id',
-            'can_be_assembled',
-            'mandatory_assembly',
-            'assembly_price',
         ]);
 
-        $this->mergeCasts([
-            'can_be_assembled' => 'boolean',
-            'mandatory_assembly' => 'boolean',
-            'assembly_price' => MoneyCast::class,
-        ]);
+        $this->mergeCasts([]);
 
         parent::__construct($attributes);
     }
@@ -64,32 +56,11 @@ class Product extends BaseProduct
     }
 
     /**
-     * @return BelongsToMany<ProductComplement, $this>
-     */
-    public function productComplements(): BelongsToMany
-    {
-        return $this->belongsToMany(ProductComplement::class);
-    }
-
-    /**
      * @return BelongsToMany<ProductSparePart, $this>
      */
     public function productSpareParts(): BelongsToMany
     {
         return $this->belongsToMany(ProductSparePart::class);
-    }
-
-    /**
-     * @return HasMany<ProductVariant, $this>
-     */
-    public function productVariants(): HasMany
-    {
-        return $this->hasMany(ProductVariant::class);
-    }
-
-    public function getFormattedAssemblyPrice(): string
-    {
-        return $this->formatCurrency($this->assembly_price);
     }
 
     public function disassemblies(): HasMany

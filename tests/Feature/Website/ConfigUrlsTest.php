@@ -17,7 +17,15 @@ test('authenticated users can access the application', function (string $url) {
     actingAs($user);
 
     $response = get($url);
-    $response->assertStatus(200);
+
+    // / should redirect to category-list
+    if ($url === '/') {
+        $response->assertStatus(302);
+        $response->assertRedirect(route('category-list'));
+    } else {
+        // All other URLs should return 200
+        $response->assertStatus(200);
+    }
 })->with('configurls');
 
 test('standard users cannot access admin panel', function () {

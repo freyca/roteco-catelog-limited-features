@@ -25,13 +25,13 @@ class ListOrders extends ListRecords
     {
         return [
             null => Tab::make(__('All')),
-            __('Paid') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::Paid)), // @phpstan-ignore-line
-            __('Payment Failed') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::PaymentFailed)), // @phpstan-ignore-line
-            __('Payment Pending') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::PaymentPending)), // @phpstan-ignore-line
-            __('Processing') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::Processing)), // @phpstan-ignore-line
-            __('Shipped') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::Shipped)), // @phpstan-ignore-line
-            __('Delivered') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::Delivered)), // @phpstan-ignore-line
-            __('Cancelled') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::Cancelled)), // @phpstan-ignore-line
+            __('Paid') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::Paid)),
+            __('Payment Failed') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::PaymentFailed)),
+            __('Payment Pending') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::PaymentPending)),
+            __('Processing') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::Processing)),
+            __('Shipped') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::Shipped)),
+            __('Delivered') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::Delivered)),
+            __('Cancelled') => Tab::make()->query(fn ($query) => $query->where('status', OrderStatus::Cancelled)),
         ];
     }
 }

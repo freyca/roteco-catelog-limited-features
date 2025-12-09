@@ -28,25 +28,29 @@ beforeEach(function () {
 it('admin can create address through relation manager', function () {
     $customer = test()->customer;
 
-    Livewire::test(AddressRelationManager::class, [
+    $component = Livewire::test(AddressRelationManager::class, [
         'ownerRecord' => $customer,
         'pageClass' => EditUser::class,
     ])
-        ->callTableAction(CreateAction::class, data: [
-            'name' => 'Shipping John',
-            'surname' => 'Doe',
-            'address_type' => AddressType::Shipping->value,
-            'bussiness_name' => 'Business Inc',
-            'financial_number' => 'B87654321',
-            'phone' => '34911111111',
-            'email' => 'shipping@example.com',
-            'address' => '789 Admin Street',
-            'city' => 'Valencia',
-            'state' => 'Valencia',
-            'zip_code' => '46001',
-            'country' => 'Spain',
-        ])
-        ->assertHasNoTableActionErrors();
+        ->mountTableAction(CreateAction::class);
+
+    $component->set('mountedActions.0.data', [
+        'name' => 'Shipping John',
+        'surname' => 'Doe',
+        'address_type' => AddressType::Shipping->value,
+        'bussiness_name' => 'Business Inc',
+        'financial_number' => 'B87654321',
+        'phone' => '34911111111',
+        'email' => 'shipping@example.com',
+        'address' => '789 Admin Street',
+        'city' => 'Valencia',
+        'state' => 'Valencia',
+        'zip_code' => 46001,
+        'country' => 'Spain',
+    ]);
+
+    $component->callMountedTableAction();
+    $component->assertHasNoTableActionErrors();
 
     expect(Address::count())->toBe(1);
     $address = Address::first();
@@ -62,15 +66,29 @@ it('admin can edit address through relation manager', function () {
         'address' => 'Old Street',
     ]);
 
-    Livewire::test(AddressRelationManager::class, [
+    $component = Livewire::test(AddressRelationManager::class, [
         'ownerRecord' => $customer,
         'pageClass' => EditUser::class,
     ])
-        ->callTableAction(EditAction::class, $address, data: [
-            'city' => 'Barcelona',
-            'address' => 'New Street',
-        ])
-        ->assertHasNoTableActionErrors();
+        ->mountTableAction(EditAction::class, $address);
+
+    $component->set('mountedActions.0.data', [
+        'name' => $address->name,
+        'surname' => $address->surname,
+        'address_type' => $address->address_type->value,
+        'bussiness_name' => $address->bussiness_name,
+        'financial_number' => $address->financial_number,
+        'phone' => $address->phone,
+        'email' => $address->email,
+        'address' => 'New Street',
+        'city' => 'Barcelona',
+        'state' => $address->state,
+        'zip_code' => $address->zip_code,
+        'country' => $address->country,
+    ]);
+
+    $component->callMountedTableAction();
+    $component->assertHasNoTableActionErrors();
 
     expect($address->fresh()->city)->toBe('Barcelona');
     expect($address->fresh()->address)->toBe('New Street');
@@ -93,56 +111,66 @@ it('admin can delete address through relation manager', function () {
 it('validates required fields in create action', function () {
     $customer = test()->customer;
 
-    Livewire::test(AddressRelationManager::class, [
+    $component = Livewire::test(AddressRelationManager::class, [
         'ownerRecord' => $customer,
         'pageClass' => EditUser::class,
     ])
-        ->callTableAction(CreateAction::class, data: [
-            'name' => '',
-            'surname' => '',
-            'address_type' => '',
-            'phone' => '',
-            'email' => '',
-            'address' => '',
-            'city' => '',
-            'state' => '',
-            'zip_code' => '',
-            'country' => '',
-        ])
-        ->assertHasTableActionErrors([
-            'name' => ['required'],
-            'surname' => ['required'],
-            'address_type' => ['required'],
-            'phone' => ['required'],
-            'email' => ['required'],
-            'address' => ['required'],
-            'city' => ['required'],
-            'state' => ['required'],
-            'zip_code' => ['required'],
-            'country' => ['required'],
-        ]);
+        ->mountTableAction(CreateAction::class);
+
+    $component->set('mountedActions.0.data', [
+        'name' => '',
+        'surname' => '',
+        'address_type' => '',
+        'bussiness_name' => '',
+        'financial_number' => '',
+        'phone' => '',
+        'email' => '',
+        'address' => '',
+        'city' => '',
+        'state' => '',
+        'zip_code' => '',
+        'country' => '',
+    ]);
+
+    $component->callMountedTableAction();
+    $component->assertHasTableActionErrors([
+        'name' => ['required'],
+        'surname' => ['required'],
+        'address_type' => ['required'],
+        'phone' => ['required'],
+        'email' => ['required'],
+        'address' => ['required'],
+        'city' => ['required'],
+        'state' => ['required'],
+        'zip_code' => ['required'],
+        'country' => ['required'],
+    ]);
 });
 
 it('can create address with optional fields empty', function () {
     $customer = test()->customer;
 
-    Livewire::test(AddressRelationManager::class, [
+    $component = Livewire::test(AddressRelationManager::class, [
         'ownerRecord' => $customer,
         'pageClass' => EditUser::class,
     ])
-        ->callTableAction(CreateAction::class, data: [
-            'name' => 'Billing John',
-            'surname' => 'Doe',
-            'address_type' => AddressType::Billing->value,
-            'phone' => '34922222222',
-            'email' => 'billing@example.com',
-            'address' => '321 Admin Avenue',
-            'city' => 'Seville',
-            'state' => 'Andalusia',
-            'zip_code' => '41001',
-            'country' => 'Spain',
-        ])
-        ->assertHasNoTableActionErrors();
+        ->mountTableAction(CreateAction::class);
+
+    $component->set('mountedActions.0.data', [
+        'name' => 'Billing John',
+        'surname' => 'Doe',
+        'address_type' => AddressType::Billing->value,
+        'phone' => '34922222222',
+        'email' => 'billing@example.com',
+        'address' => '321 Admin Avenue',
+        'city' => 'Seville',
+        'state' => 'Andalusia',
+        'zip_code' => 41001,
+        'country' => 'Spain',
+    ]);
+
+    $component->callMountedTableAction();
+    $component->assertHasNoTableActionErrors();
 
     expect(Address::count())->toBe(1);
     $address = Address::first();

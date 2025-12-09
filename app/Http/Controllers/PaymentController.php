@@ -10,7 +10,6 @@ use App\Models\Order;
 use App\Repositories\Database\Order\Order\OrderRepositoryInterface;
 use App\Services\Cart;
 use App\Services\Payment;
-use App\Services\SpecialPrices;
 use Illuminate\View\View;
 
 class PaymentController extends Controller
@@ -18,7 +17,6 @@ class PaymentController extends Controller
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly Cart $cart,
-        private readonly SpecialPrices $special_prices,
     ) {}
 
     public function redirectToPayment(Order $order): mixed
@@ -31,10 +29,6 @@ class PaymentController extends Controller
     public function orderFinishedOk(Order $order): View
     {
         $this->cart->clear();
-
-        // Refreshes user purchased products in cart session so discounts
-        // can be applied if decides to make another purchase
-        $this->special_prices->updateSpecialPrices(true);
 
         return view('pages.purchase-complete', [
             'order' => $order,

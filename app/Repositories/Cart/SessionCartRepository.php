@@ -6,9 +6,7 @@ namespace App\Repositories\Cart;
 
 use App\DTO\OrderProductDTO;
 use App\Models\BaseProduct;
-use App\Models\ProductVariant;
 use App\Services\PriceCalculator;
-use App\Services\SpecialPrices;
 use App\Traits\CurrencyFormatter;
 use Exception;
 use Illuminate\Support\Collection;
@@ -24,7 +22,6 @@ class SessionCartRepository implements CartRepositoryInterface
     const SESSION = 'cart';
 
     public function __construct(
-        private readonly SpecialPrices $special_prices,
         private readonly PriceCalculator $price_calculator,
     ) {
         if (! Session::has(self::SESSION)) {
@@ -35,28 +32,26 @@ class SessionCartRepository implements CartRepositoryInterface
     /**
      * Functions for products
      */
-    public function add(BaseProduct $product, int $quantity, bool $assemble, ?ProductVariant $variant): bool
+    public function add(BaseProduct $product, int $quantity): bool
     {
-        $order_products = $this->addProductToOrder($product, $assemble, $quantity, $variant);
+        $order_products = $this->addProductToOrder($product, $quantity);
 
         $this->updateCart($order_products);
-        $this->addProductToDiscountable($product);
 
         return true;
     }
 
-    public function remove(BaseProduct $product, bool $assemble, ?ProductVariant $variant): void
+    public function remove(BaseProduct $product): void
     {
-        $order_products = $this->removeProductFromOrder($product, $assemble, $variant);
+        $order_products = $this->removeProductFromOrder($product);
 
         $this->updateCart($order_products);
-        $this->removeProductFromDiscountable($product);
     }
 
-    public function hasProduct(BaseProduct $product, bool $assemble, ?ProductVariant $variant): bool
+    public function hasProduct(BaseProduct $product): bool
     {
         try {
-            $this->searchProductKey($product, $assemble, $variant);
+            $this->searchProductKey($product);
 
             return true;
         } catch (Throwable $th) {
@@ -64,18 +59,9 @@ class SessionCartRepository implements CartRepositoryInterface
         }
     }
 
-    public function canBeIncremented(BaseProduct $product, bool $assemble, ?ProductVariant $variant): bool
+    public function canBeIncremented(BaseProduct $product): bool
     {
         return true;
-        // try {
-        //    $quantity = $this->searchProductKey($product, $assemble, $variant)['order_product_dto']->quantity();
-        // } catch (Throwable $th) {
-        //    return false;
-        // }
-        //
-        // $quantity = $this->searchProductKey($product, $assemble, $variant)['order_product_dto']->quantity();
-        //
-        // return ($variant !== null) ? ($variant->stock - $quantity) > 0 : ($product->stock - $quantity) > 0;
     }
 
     public function isEmpty(): bool
@@ -114,10 +100,10 @@ class SessionCartRepository implements CartRepositoryInterface
         return $quantity;
     }
 
-    public function getTotalQuantityForProduct(BaseProduct $product, bool $assemble, ?ProductVariant $variant): int
+    public function getTotalQuantityForProduct(BaseProduct $product): int
     {
         try {
-            return $this->searchProductKey($product, $assemble, $variant)['order_product_dto']->quantity();
+            return $this->searchProductKey($product)['order_product_dto']->quantity();
         } catch (Throwable $th) {
             return 0;
         }
@@ -162,20 +148,20 @@ class SessionCartRepository implements CartRepositoryInterface
         return $formatted ? $this->formatCurrency($total) : $total;
     }
 
-    public function getTotalCostforProduct(BaseProduct $product, bool $assemble, ?ProductVariant $variant, bool $formatted = false): float|string
+    public function getTotalCostforProduct(BaseProduct $product, bool $formatted = false): float|string
     {
-        $is_present = $this->searchProductKey($product, $assemble, $variant);
+        $is_present = $this->searchProductKey($product);
 
-        $total = $this->price_calculator->getTotalCostForProduct($is_present['order_product_dto'], $is_present['order_product_dto']->quantity(), $assemble);
+        $total = $this->price_calculator->getTotalCostForProduct($is_present['order_product_dto'], $is_present['order_product_dto']->quantity());
 
         return $formatted ? $this->formatCurrency($total) : $total;
     }
 
-    public function getTotalCostforProductWithoutDiscount(BaseProduct $product, bool $assemble, ?ProductVariant $variant, bool $formatted = false): float|string
+    public function getTotalCostforProductWithoutDiscount(BaseProduct $product, bool $formatted = false): float|string
     {
-        $is_present = $this->searchProductKey($product, $assemble, $variant);
+        $is_present = $this->searchProductKey($product);
 
-        $total = $this->price_calculator->getTotalCostForProductWithoutDiscount($is_present['order_product_dto'], $is_present['order_product_dto']->quantity(), $assemble);
+        $total = $this->price_calculator->getTotalCostForProductWithoutDiscount($is_present['order_product_dto'], $is_present['order_product_dto']->quantity());
 
         return $formatted ? $this->formatCurrency($total) : $total;
     }
@@ -183,12 +169,12 @@ class SessionCartRepository implements CartRepositoryInterface
     /**
      * Cart logic
      */
-    private function addProductToOrder(BaseProduct $product, bool $assemble, int $quantity, ?ProductVariant $variant): Collection
+    private function addProductToOrder(BaseProduct $product, int $quantity): Collection
     {
         $order_products = $this->getCart();
 
         try {
-            $is_present = $this->searchProductKey($product, $assemble, $variant);
+            $is_present = $this->searchProductKey($product);
 
             $is_present['order_product_dto']->setQuantity($is_present['order_product_dto']->quantity() + $quantity);
 
@@ -197,11 +183,9 @@ class SessionCartRepository implements CartRepositoryInterface
             $order_product = new OrderProductDTO(
                 orderable_id: $product->id,
                 orderable_type: get_class($product),
-                product_variant_id: ! is_null($variant) ? $variant->id : null,
                 unit_price: $product->price_with_discount ? $product->price_with_discount : $product->price,
-                assembly_price: ($assemble && isset($product->assembly_price)) ? $product->assembly_price : 0,
                 quantity: $quantity,
-                product: ! is_null($variant) ? $variant : $product,
+                product: $product,
             );
 
             $order_products->add($order_product);
@@ -210,10 +194,10 @@ class SessionCartRepository implements CartRepositoryInterface
         return $order_products;
     }
 
-    private function removeProductFromOrder(BaseProduct $product, bool $assemble, ?ProductVariant $variant): Collection
+    private function removeProductFromOrder(BaseProduct $product): Collection
     {
         $order_products = $this->getCart();
-        $key = $this->searchProductKey($product, $assemble, $variant)['key'];
+        $key = $this->searchProductKey($product)['key'];
 
         $order_products->forget($key);
 
@@ -223,24 +207,16 @@ class SessionCartRepository implements CartRepositoryInterface
     /**
      * @return array{key: int, order_product_dto: OrderProductDTO}
      */
-    private function searchProductKey(BaseProduct $product, bool $assemble, ?ProductVariant $variant): array
+    private function searchProductKey(BaseProduct $product): array
     {
         $order_products = $this->getCart();
 
-        $product_variant_id = null;
-        if (! is_null($variant)) {
-            $product_variant_id = $variant->id;
-        }
-
-        $match = $order_products->filter(function (OrderProductDTO $item) use ($product, $product_variant_id, $assemble) {
+        $match = $order_products->filter(function (OrderProductDTO $item) use ($product) {
             $class = get_class($product);
             $id = $product->id;
-            $assembly_price = ! $assemble || ! isset($product->assembly_price) ? floatval(0) : $product->assembly_price;
 
             return $item->orderableType() === $class
-                && $item->orderableId() === $id
-                && $item->productVariantId() === $product_variant_id
-                && $item->assemblyPrice() === $assembly_price;
+                && $item->orderableId() === $id;
         });
 
         if ($match->count() !== 1) {
@@ -273,20 +249,5 @@ class SessionCartRepository implements CartRepositoryInterface
         $this->session_content = $order_products;
 
         Session::put(self::SESSION, $order_products);
-    }
-
-    /**
-     * Only Products has discounts in Complements and Spare Parts
-     * If Product is a Variant, since complements and SpareParts are associated
-     * to parent, we use parent id
-     */
-    private function addProductToDiscountable(BaseProduct $product): void
-    {
-        $this->special_prices->addCartItem($product->ean13);
-    }
-
-    private function removeProductFromDiscountable(BaseProduct $product): void
-    {
-        $this->special_prices->deleteCartItem($product->ean13);
     }
 }

@@ -14,7 +14,7 @@
             @livewire(
                 'cart.product-card',
                 ['order_product' => $cart_item],
-                key('product-' . Str::random(5) . '-' . $cart_item->assemblyPrice() . '-' . $cart_item->productVariantId() . '-' . Str::random(5))
+                key('product-' . Str::random(5) . '-' . $cart_item->orderableId() . '-' . Str::random(5))
             )
         @endforeach
     </div>

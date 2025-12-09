@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Enums\AddressType;
 use App\Enums\Role;
 use Database\Factories\UserFactory;
@@ -33,6 +31,7 @@ class User extends Authenticatable implements FilamentUser
         'surname',
         'email',
         'password',
+        'role',
     ];
 
     /**

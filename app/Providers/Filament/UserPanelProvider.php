@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Filament\User\Pages\Auth\EditProfile;
-use App\Http\Middleware\PushPurchasedItemsToCart;
 use App\Http\Middleware\RedirectsAdminUsersToAdminPanel;
 use Filament\Auth\Pages\Login;
 use Filament\Http\Middleware\Authenticate;
@@ -33,7 +32,6 @@ class UserPanelProvider extends PanelProvider
             ->path('user')
             ->passwordReset()
             ->login(Login::class)
-            // ->registration(Register::class)
             ->profile(
                 page: EditProfile::class,
                 isSimple: false
@@ -61,20 +59,6 @@ class UserPanelProvider extends PanelProvider
                     ->icon('heroicon-o-rectangle-stack')
                     ->group(__('Website urls'))
                     ->sort(5),
-                // NavigationItem::make(__('Product complements'))
-                //    ->url(function () {
-                //        return route('complement-list');
-                //    })
-                //    ->icon('heroicon-o-puzzle-piece')
-                //    ->group(__('Website urls'))
-                //    ->sort(5),
-                // NavigationItem::make(__('Product spare parts'))
-                //    ->url(function () {
-                //        return route('spare-part-list');
-                //    })
-                //    ->icon('heroicon-s-wrench')
-                //    ->group(__('Website urls'))
-                //    ->sort(5),
                 NavigationItem::make(__('Profile'))
                     ->url('/user/profile', shouldOpenInNewTab: false)
                     ->icon('heroicon-s-user-circle')
@@ -109,7 +93,6 @@ class UserPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
                 RedirectsAdminUsersToAdminPanel::class,
-                PushPurchasedItemsToCart::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

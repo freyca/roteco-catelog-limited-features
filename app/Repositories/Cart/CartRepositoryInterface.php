@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repositories\Cart;
 
 use App\Models\BaseProduct;
-use App\Models\ProductVariant;
 use Illuminate\Support\Collection;
 
 interface CartRepositoryInterface
@@ -13,13 +12,13 @@ interface CartRepositoryInterface
     /**
      * Functions for products
      */
-    public function add(BaseProduct $product, int $quantity, bool $assemble, ?ProductVariant $variant): bool;
+    public function add(BaseProduct $product, int $quantity): bool;
 
-    public function remove(BaseProduct $product, bool $assemble, ?ProductVariant $variant): void;
+    public function remove(BaseProduct $product): void;
 
-    public function hasProduct(BaseProduct $product, bool $assemble, ?ProductVariant $variant): bool;
+    public function hasProduct(BaseProduct $product): bool;
 
-    public function canBeIncremented(BaseProduct $product, bool $assemble, ?ProductVariant $variant): bool;
+    public function canBeIncremented(BaseProduct $product): bool;
 
     public function isEmpty(): bool;
 
@@ -32,7 +31,7 @@ interface CartRepositoryInterface
      */
     public function getTotalQuantity(): int;
 
-    public function getTotalQuantityForProduct(BaseProduct $product, bool $assemble, ?ProductVariant $variant): int;
+    public function getTotalQuantityForProduct(BaseProduct $product): int;
 
     /**
      * Functions for prices
@@ -45,7 +44,7 @@ interface CartRepositoryInterface
 
     public function getTotalCostWithoutDiscount(bool $formatted = false): float|string;
 
-    public function getTotalCostforProduct(BaseProduct $product, bool $assemble, ?ProductVariant $variant, bool $formatted = false): float|string;
+    public function getTotalCostforProduct(BaseProduct $product, bool $formatted = false): float|string;
 
-    public function getTotalCostforProductWithoutDiscount(BaseProduct $product, bool $assemble, ?ProductVariant $variant, bool $formatted = false): float|string;
+    public function getTotalCostforProductWithoutDiscount(BaseProduct $product, bool $formatted = false): float|string;
 }

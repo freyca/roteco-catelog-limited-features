@@ -80,38 +80,6 @@
                 </div>
             @endif
 
-            @if($enabled_filters['features'] === true)
-                <!-- Filtro de Características -->
-                <div class="filter-features">
-                    <label class="block text-primary-700">{{ __('Technical details') }}:</label>
-                    @foreach (App\Models\ProductFeature::with('productFeatureValues')->get() as $feature)
-                        <details class="group relative mb-4 {{ $loop->last ? 'pb-28' : '' }}">
-                            <summary
-                                class="cursor-pointer text-primary-700 flex items-center justify-between bg-primary-100 p-2 rounded-md hover:bg-primary-200 transition">
-                                <span class="flex items-center">
-                                    @svg('heroicon-o-tag', 'w-5 h-5 text-primary-500 mr-2')
-                                    {{ __($feature->name) }}
-                                </span>
-                                <span class="transition-transform duration-100 transform group-open:rotate-180">
-                                    @svg('heroicon-o-chevron-down', 'w-5 h-5 text-primary-500')
-                                </span>
-                            </summary>
-                            <div
-                                class="shadow-lg p-4 rounded-md z-50 hidden group-open:block w-full md:w-auto bg-primary-100 text-black hover:bg-primary-300">
-                                @foreach ($feature->productFeatureValues as $featureValue)
-                                    <div class="flex items-center mb-2">
-                                        <label class="flex items-center">
-                                            <input wire:model="filtered_features" value="{{ $featureValue->id }}"
-                                                type="checkbox" class="mr-2 rounded border-none ring-1 transition duration-75 checked:ring-0 focus:ring-2 focus:ring-offset-0 text-red-600 ring-gray-950/10 focus:ring-red-600 checked:focus:ring-red-500/50">
-                                            {{ __($featureValue->name) }}
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </details>
-                    @endforeach
-                </div>
-            @endif
         </form>
     </div>
 </aside>

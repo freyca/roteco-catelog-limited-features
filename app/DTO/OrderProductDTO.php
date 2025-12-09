@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\DTO;
 
 use App\Models\BaseProduct;
-use App\Models\ProductVariant;
 
 class OrderProductDTO
 {
@@ -23,18 +22,14 @@ class OrderProductDTO
 
     private BaseProduct $product;
 
-    private ?ProductVariant $product_variant;
-
     public function __construct(
         private int $orderable_id,
         private string $orderable_type,
-        private ?int $product_variant_id,
         private float $unit_price,
-        private ?float $assembly_price,
         private int $quantity,
-        ProductVariant|BaseProduct $product,
+        BaseProduct $product,
     ) {
-        $this->ean13 = $product->ean13;
+        $this->ean13 = (int) $product->ean13;
         $this->price_with_discount = $product->price_with_discount;
         $this->price_without_discount = $product->price;
         $this->price_when_user_owns_product = ! isset($product->price_when_user_owns_product) ? null : $product->price_when_user_owns_product;
@@ -55,19 +50,6 @@ class OrderProductDTO
         }
 
         return $this->product;
-    }
-
-    public function getProductVariant(): ?ProductVariant
-    {
-        if (is_null($this->product_variant_id)) {
-            return null;
-        }
-
-        if (! isset($this->product_variant)) {
-            $this->product_variant = ProductVariant::find($this->product_variant_id);
-        }
-
-        return $this->product_variant;
     }
 
     public function priceWithoutDiscount(): float
@@ -100,19 +82,9 @@ class OrderProductDTO
         return $this->orderable_type;
     }
 
-    public function productVariantId(): ?int
-    {
-        return $this->product_variant_id;
-    }
-
     public function unitPrice(): float
     {
         return $this->unit_price;
-    }
-
-    public function assemblyPrice(): ?float
-    {
-        return $this->assembly_price;
     }
 
     public function quantity(): int

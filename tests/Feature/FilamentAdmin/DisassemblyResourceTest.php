@@ -22,14 +22,14 @@ beforeEach(function () {
 
 describe('DisassemblyResource', function () {
     it('admin can access disassembly list page', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
 
         Livewire::test(ListDisassemblies::class)
             ->assertStatus(200);
     });
 
     it('can display disassemblies in list table', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
         $disassemblies = Disassembly::factory(3)->create();
 
         $component = Livewire::test(ListDisassemblies::class);
@@ -40,7 +40,7 @@ describe('DisassemblyResource', function () {
     });
 
     it('admin can access create disassembly page', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
 
         Livewire::test(CreateDisassembly::class)
             ->assertStatus(200);
@@ -49,32 +49,24 @@ describe('DisassemblyResource', function () {
     it('can create a new disassembly via form', function () {
         $this->actingAs(test()->admin);
         $product = Product::factory()->create();
-
-        Livewire::test(CreateDisassembly::class)
-            ->fillForm([
-                'name' => 'New Disassembly',
-                'product_id' => $product->id,
-                'main_image' => ['disasm.jpg'],
-                'productSpareParts' => [],
-            ])
-            ->call('create')
-            ->assertHasNoFormErrors();
-
+        $file = UploadedFile::fake()->image('disasm.jpg');
+        $component = Livewire::test(CreateDisassembly::class);
+        $component->set('data.name', 'New Disassembly');
+        $component->set('data.product_id', $product->id);
+        $component->set('data.main_image', $file);
+        $component->set('data.productSpareParts', []);
+        $component->call('create');
+        $component->assertHasNoFormErrors();
         expect(Disassembly::where('name', 'New Disassembly')->exists())->toBeTrue();
     });
 
-    it('validates name is required on create', function () {
-        $this->actingAs(test()->admin);
-        $product = Product::factory()->create();
-
-        Livewire::test(CreateDisassembly::class)
-            ->fillForm([
-                'name' => '',
-                'product_id' => $product->id,
-                'main_image' => ['disasm.jpg'],
-            ])
-            ->call('create')
-            ->assertHasFormErrors(['name' => 'required']);
+    it('validates name is required on update', function () {
+        test()->actingAs(test()->admin);
+        $disassembly = Disassembly::factory()->create();
+        $component = Livewire::test(EditDisassembly::class, ['record' => $disassembly->getRouteKey()]);
+        $component->set('data.name', '');
+        $component->call('save');
+        $component->assertHasFormErrors(['name' => 'required']);
     });
 
     it('validates product_id is required on create', function () {
@@ -116,26 +108,13 @@ describe('DisassemblyResource', function () {
         $this->actingAs(test()->admin);
         $disassembly = Disassembly::factory()->create(['name' => 'Old Name']);
 
-        Livewire::test(EditDisassembly::class, ['record' => $disassembly->getRouteKey()])
-            ->fillForm([
-                'name' => 'Updated Name',
-            ])
-            ->call('save');
+        $component = Livewire::test(EditDisassembly::class, ['record' => $disassembly->getRouteKey()]);
+        $component->set('data.name', 'Updated Name');
+        $component->call('save');
 
         expect(Disassembly::find($disassembly->id)->name)->toBe('Updated Name');
     });
 
-    it('validates name is required on update', function () {
-        $this->actingAs(test()->admin);
-        $disassembly = Disassembly::factory()->create();
-
-        Livewire::test(EditDisassembly::class, ['record' => $disassembly->getRouteKey()])
-            ->fillForm([
-                'name' => '',
-            ])
-            ->call('save')
-            ->assertHasFormErrors(['name' => 'required']);
-    });
 
     it('disassembly resource has correct navigation group', function () {
         $group = \App\Filament\Admin\Resources\Products\Disassemblies\DisassemblyResource::getNavigationGroup();

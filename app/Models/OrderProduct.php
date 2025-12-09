@@ -33,7 +33,6 @@ class OrderProduct extends Pivot
     {
         return [
             'unit_price' => MoneyCast::class,
-            'assembly_price' => MoneyCast::class,
         ];
     }
 
@@ -41,9 +40,7 @@ class OrderProduct extends Pivot
         'order_id',
         'orderable_id',
         'orderable_type',
-        'product_variant_id',
         'unit_price',
-        'assembly_price',
         'quantity',
     ];
 

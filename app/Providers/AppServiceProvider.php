@@ -24,7 +24,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(LogoutResponse::class, FilamentLogoutResponse::class);
         $this->app->bind(LoginResponse::class, FilamentLoginResponse::class);
-        $this->app->bind(RegistrationResponse::class, FilamentRegistrationResponse::class);
     }
 
     /**
@@ -32,13 +31,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fieldset::configureUsing(fn (Fieldset $fieldset) => $fieldset
+        Fieldset::configureUsing(fn(Fieldset $fieldset) => $fieldset
             ->columnSpanFull());
 
-        Grid::configureUsing(fn (Grid $grid) => $grid
+        Grid::configureUsing(fn(Grid $grid) => $grid
             ->columnSpanFull());
 
-        Section::configureUsing(fn (Section $section) => $section
+        Section::configureUsing(fn(Section $section) => $section
             ->columnSpanFull());
     }
 }

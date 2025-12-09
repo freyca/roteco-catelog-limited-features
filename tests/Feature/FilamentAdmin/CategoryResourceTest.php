@@ -21,14 +21,14 @@ beforeEach(function () {
 
 describe('CategoryResource', function () {
     it('admin can access category list page', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
 
         Livewire::test(ListCategories::class)
             ->assertStatus(200);
     });
 
     it('can display categories in list table', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
         $categories = Category::factory(3)->create();
 
         $component = Livewire::test(ListCategories::class);
@@ -39,53 +39,49 @@ describe('CategoryResource', function () {
     });
 
     it('admin can access create category page', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
 
         Livewire::test(CreateCategory::class)
             ->assertStatus(200);
     });
 
     it('can create a new category via form', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
+        Storage::fake('local');
         $initialCount = Category::count();
 
-        Livewire::test(CreateCategory::class)
-            ->fillForm([
-                'name' => 'New Electronics',
-                'big_image' => ['test-image.jpg'],
-            ])
-            ->call('create');
+        $file = UploadedFile::fake()->image('test-image.jpg');
+
+        $component = Livewire::test(CreateCategory::class);
+        $component->set('data.name', 'New Electronics');
+        $component->set('data.big_image', $file);
+        $component->call('create');
 
         expect(Category::count())->toBeGreaterThan($initialCount);
         expect(Category::where('name', 'New Electronics')->exists())->toBeTrue();
     });
 
     it('validates name is required on create', function () {
-        $this->actingAs(test()->admin);
-
-        Livewire::test(CreateCategory::class)
-            ->fillForm([
-                'name' => '',
-                'big_image' => ['test.jpg'],
-            ])
-            ->call('create')
-            ->assertHasFormErrors(['name' => 'required']);
+        test()->actingAs(test()->admin);
+        $file = UploadedFile::fake()->image('test.jpg');
+        $component = Livewire::test(CreateCategory::class);
+        $component->set('data.name', '');
+        $component->set('data.big_image', $file);
+        $component->call('create');
+        $component->assertHasFormErrors(['name' => 'required']);
     });
 
     it('validates big_image is required on create', function () {
-        $this->actingAs(test()->admin);
-
-        Livewire::test(CreateCategory::class)
-            ->fillForm([
-                'name' => 'Test Category',
-                'big_image' => null,
-            ])
-            ->call('create')
-            ->assertHasFormErrors(['big_image' => 'required']);
+        test()->actingAs(test()->admin);
+        $component = Livewire::test(CreateCategory::class);
+        $component->set('data.name', 'Test Category');
+        $component->set('data.big_image', null);
+        $component->call('create');
+        $component->assertHasFormErrors(['big_image' => 'required']);
     });
 
     it('admin can access edit category page', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
         $category = Category::factory()->create();
 
         Livewire::test(EditCategory::class, ['record' => $category->getRouteKey()])
@@ -93,32 +89,27 @@ describe('CategoryResource', function () {
     });
 
     it('can update category via form', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
         $category = Category::factory()->create(['name' => 'Old Name']);
 
-        Livewire::test(EditCategory::class, ['record' => $category->getRouteKey()])
-            ->fillForm([
-                'name' => 'Updated Name',
-            ])
-            ->call('save');
-
+        $component = Livewire::test(EditCategory::class, ['record' => $category->getRouteKey()]);
+        $component->set('data.name', 'Updated Name');
+        $component->call('save');
         expect(Category::find($category->id)->name)->toBe('Updated Name');
     });
 
     it('validates name is required on update', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
         $category = Category::factory()->create();
 
-        Livewire::test(EditCategory::class, ['record' => $category->getRouteKey()])
-            ->fillForm([
-                'name' => '',
-            ])
-            ->call('save')
-            ->assertHasFormErrors(['name' => 'required']);
+        $component = Livewire::test(EditCategory::class, ['record' => $category->getRouteKey()]);
+        $component->set('data.name', '');
+        $component->call('save');
+        $component->assertHasFormErrors(['name' => 'required']);
     });
 
     it('can delete category via delete action', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
         $category = Category::factory()->create(['name' => 'To Delete']);
         $categoryId = $category->id;
 
@@ -155,7 +146,7 @@ describe('CategoryResource', function () {
 
     it('can import categories from CSV via Livewire action', function () {
         Storage::fake('local');
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
 
         // Create a fake CSV file with correct headers and data
         $csvContent = "name,slug,big_image\nImported Electronics,imported-electronics,electronics.jpg\nImported Clothing,imported-clothing,clothing.jpg\n";

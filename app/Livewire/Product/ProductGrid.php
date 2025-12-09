@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Livewire\Product;
 
-use App\DTO\FilterDTO;
-use App\Models\ProductComplement;
 use App\Models\ProductSparePart;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;
@@ -44,16 +42,9 @@ class ProductGrid extends Component
 
     public string $class_filter;
 
-    public function mount(string $class_name): void
+    public function mount(): void
     {
-        $basename = 'App\Repositories\Database\Product';
-
-        $this->class_filter =
-            match ($class_name) {
-                ProductComplement::class => $basename.'\ProductComplement\EloquentProductComplementRepository',
-                ProductSparePart::class => $basename.'\ProductSparePart\EloquentProductSparePartRepository',
-                default => $basename.'\Product\EloquentProductRepository',
-            };
+        $this->class_filter = 'App\Repositories\Database\Product\Product\EloquentProductRepository';
     }
 
     /**
@@ -76,16 +67,7 @@ class ProductGrid extends Component
             $this->resetPage();
         }
 
-        $filter_dto = new FilterDTO;
-
-        // Database has prices in cents
-        $filter_dto->minPrice(intval($filters['min_price']) * 100);
-        $filter_dto->maxPrice(intval($filters['max_price']) * 100);
-        $filter_dto->category($filters['filtered_category']);
-        $filter_dto->features($filters['filtered_features']);
-
         $repository = app($this->class_filter);
-        // $this->products = $repository->filter($filter_dto);
         $this->products = $repository->getAll();
     }
 

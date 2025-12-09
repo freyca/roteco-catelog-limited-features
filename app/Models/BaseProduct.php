@@ -7,11 +7,9 @@ namespace App\Models;
 use App\Casts\MoneyCast;
 use App\Models\Scopes\PublishedScope;
 use App\Models\Traits\FormatsPrices;
-use App\Models\Traits\HasProductFeatures;
 use App\Models\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -33,13 +31,11 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property string $description
  * @property string $main_image
  * @property array<string> $images
- * @property BelongsToMany<ProductFeatureValue, $this> $productFeatureValues
  */
 #[ScopedBy([PublishedScope::class])]
 abstract class BaseProduct extends Model
 {
     use FormatsPrices;
-    use HasProductFeatures;
     use HasSlug;
 
     protected $fillable = [

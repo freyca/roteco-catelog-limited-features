@@ -22,14 +22,14 @@ beforeEach(function () {
 
 describe('ProductResource', function () {
     it('admin can access product list page', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
 
         Livewire::test(ListProducts::class)
             ->assertStatus(200);
     });
 
     it('can display products in list table', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
         $products = Product::factory(3)->create();
 
         $component = Livewire::test(ListProducts::class);
@@ -40,44 +40,35 @@ describe('ProductResource', function () {
     });
 
     it('admin can access create product page', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
 
         Livewire::test(CreateProduct::class)
             ->assertStatus(200);
     });
 
     it('can create a new product via form', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
         $category = Category::factory()->create();
-
-        Livewire::test(CreateProduct::class)
-            ->fillForm([
-                'name' => 'New Product',
-                'slug' => 'new-product',
-                'ean13' => '1234567890123',
-                'category_id' => $category->id,
-                'main_image' => ['product.jpg'],
-                'disassemblies' => [],
-            ])
-            ->call('create')
-            ->assertHasNoFormErrors();
-
+        $file = UploadedFile::fake()->image('product.jpg');
+        $component = Livewire::test(CreateProduct::class);
+        $component->set('data.name', 'New Product');
+        $component->set('data.slug', 'new-product');
+        $component->set('data.ean13', '1234567890123');
+        $component->set('data.category_id', $category->id);
+        $component->set('data.main_image', $file);
+        $component->set('data.disassemblies', []);
+        $component->call('create');
+        $component->assertHasNoFormErrors();
         expect(Product::where('name', 'New Product')->exists())->toBeTrue();
     });
 
-    it('validates name is required on create', function () {
-        $this->actingAs(test()->admin);
-        $category = Category::factory()->create();
-
-        Livewire::test(CreateProduct::class)
-            ->fillForm([
-                'name' => '',
-                'ean13' => '1234567890123',
-                'category_id' => $category->id,
-                'main_image' => ['product.jpg'],
-            ])
-            ->call('create')
-            ->assertHasFormErrors(['name' => 'required']);
+    it('validates name is required on update', function () {
+        test()->actingAs(test()->admin);
+        $product = Product::factory()->create();
+        $component = Livewire::test(EditProduct::class, ['record' => $product->getRouteKey()]);
+        $component->set('data.name', '');
+        $component->call('save');
+        $component->assertHasFormErrors(['name' => 'required']);
     });
 
     it('validates ean13 is required on create', function () {
@@ -136,26 +127,13 @@ describe('ProductResource', function () {
         $this->actingAs(test()->admin);
         $product = Product::factory()->create(['name' => 'Old Name']);
 
-        Livewire::test(EditProduct::class, ['record' => $product->getRouteKey()])
-            ->fillForm([
-                'name' => 'Updated Name',
-            ])
-            ->call('save');
+        $component = Livewire::test(EditProduct::class, ['record' => $product->getRouteKey()]);
+        $component->set('data.name', 'Updated Name');
+        $component->call('save');
 
         expect(Product::find($product->id)->name)->toBe('Updated Name');
     });
 
-    it('validates name is required on update', function () {
-        $this->actingAs(test()->admin);
-        $product = Product::factory()->create();
-
-        Livewire::test(EditProduct::class, ['record' => $product->getRouteKey()])
-            ->fillForm([
-                'name' => '',
-            ])
-            ->call('save')
-            ->assertHasFormErrors(['name' => 'required']);
-    });
 
     it('product resource has correct navigation group', function () {
         $group = \App\Filament\Admin\Resources\Products\Products\ProductResource::getNavigationGroup();

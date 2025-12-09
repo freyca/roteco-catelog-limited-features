@@ -6,7 +6,6 @@ namespace App\Factories\BreadCrumbs;
 
 use App\Models\BaseProduct;
 use App\Models\Product;
-use App\Models\ProductComplement;
 use App\Models\ProductSparePart;
 use Exception;
 
@@ -17,7 +16,6 @@ class ProductBreadCrumbs extends StandardPageBreadCrumbs
         parent::setDefaultBreadCrumb();
 
         $bread_crumbs = match (true) {
-            is_a($product, ProductComplement::class) => $this->productComplementBreadCrumb(),
             is_a($product, ProductSparePart::class) => $this->productSparePartBreadCrumb(),
             is_a($product, Product::class) => $this->productBreadCrumb($product),
             default => throw new Exception('Invalid class type'),
@@ -35,17 +33,10 @@ class ProductBreadCrumbs extends StandardPageBreadCrumbs
         ];
     }
 
-    private function productComplementBreadCrumb(): array
-    {
-        return [
-            __('Complements') => route('complement-list'), // @phpstan-ignore-line
-        ];
-    }
-
     private function productSparePartBreadCrumb(): array
     {
         return [
-            __('Spare parts') => route('spare-part-list'), // @phpstan-ignore-line
+            __('Spare parts') => route('spare-part-list'),
         ];
     }
 }

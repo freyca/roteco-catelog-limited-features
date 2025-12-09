@@ -22,46 +22,41 @@ beforeEach(function () {
 
 describe('ProductSparePartResource', function () {
     it('admin can access product spare part list page', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
 
         Livewire::test(ListProductSpareParts::class)
             ->assertStatus(200);
     });
 
     it('can display product spare parts in list table', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
         $spareParts = ProductSparePart::factory(3)->create();
 
         $component = Livewire::test(ListProductSpareParts::class);
-
         foreach ($spareParts as $sparePart) {
             $component->assertSee($sparePart->name);
         }
     });
 
     it('admin can access create product spare part page', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
 
         Livewire::test(CreateProductSparePart::class)
             ->assertStatus(200);
     });
 
     it('can create a new product spare part via form', function () {
-        $this->actingAs(test()->admin);
+        test()->actingAs(test()->admin);
         $disassembly = \App\Models\Disassembly::factory()->create();
-
-        Livewire::test(CreateProductSparePart::class)
-            ->fillForm([
-                'name' => 'New Spare Part',
-                'ean13' => 1234567890123,
-                'slug' => 'new-spare-part',
-                'price' => 100,
-                'published' => true,
-                'disassembly_id' => $disassembly->id,
-            ])
-            ->call('create')
-            ->assertHasNoFormErrors();
-
+        $component = Livewire::test(CreateProductSparePart::class);
+        $component->set('data.name', 'New Spare Part');
+        $component->set('data.ean13', 1234567890123);
+        $component->set('data.slug', 'new-spare-part');
+        $component->set('data.price', 100);
+        $component->set('data.published', true);
+        $component->set('data.disassembly_id', $disassembly->id);
+        $component->call('create');
+        $component->assertHasNoFormErrors();
         expect(ProductSparePart::where('name', 'New Spare Part')->exists())->toBeTrue();
     });
 
@@ -124,11 +119,9 @@ describe('ProductSparePartResource', function () {
         $this->actingAs(test()->admin);
         $sparePart = ProductSparePart::factory()->create(['name' => 'Old Name']);
 
-        Livewire::test(EditProductSparePart::class, ['record' => $sparePart->getRouteKey()])
-            ->fillForm([
-                'name' => 'Updated Name',
-            ])
-            ->call('save');
+        $component = Livewire::test(EditProductSparePart::class, ['record' => $sparePart->getRouteKey()]);
+        $component->set('data.name', 'Updated Name');
+        $component->call('save');
 
         expect(ProductSparePart::find($sparePart->id)->name)->toBe('Updated Name');
     });
@@ -137,12 +130,10 @@ describe('ProductSparePartResource', function () {
         $this->actingAs(test()->admin);
         $sparePart = ProductSparePart::factory()->create();
 
-        Livewire::test(EditProductSparePart::class, ['record' => $sparePart->getRouteKey()])
-            ->fillForm([
-                'name' => '',
-            ])
-            ->call('save')
-            ->assertHasFormErrors(['name' => 'required']);
+        $component = Livewire::test(EditProductSparePart::class, ['record' => $sparePart->getRouteKey()]);
+        $component->set('data.name', '');
+        $component->call('save');
+        $component->assertHasFormErrors(['name' => 'required']);
     });
 
     it('product spare part resource has correct navigation group', function () {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\Users\Users\RelationManagers;
 
 use App\Enums\AddressType;
+use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -23,6 +24,7 @@ class AddressRelationManager extends RelationManager
 
     public function form(Schema $schema): Schema
     {
+        /** @var User $user */
         $user = $this->ownerRecord;
 
         return $schema

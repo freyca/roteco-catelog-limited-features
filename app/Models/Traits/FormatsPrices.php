@@ -12,7 +12,7 @@ trait FormatsPrices
 
     public function getFormattedPrice(): string
     {
-        $price = $this->price === null ? floatval(0) : $this->price;
+        $price = $this->price ?? floatval(0);
 
         return $this->formatCurrency($price);
     }

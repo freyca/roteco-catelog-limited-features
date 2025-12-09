@@ -4,18 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\Products\Traits;
 
-use App\Models\Product;
-use App\Models\ProductComplement;
-use App\Models\ProductSparePart;
-use Filament\Forms;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
-use Livewire\Component;
 
 trait FormBuilderTrait
 {
@@ -40,37 +34,9 @@ trait FormBuilderTrait
                 ->label(__('Name'))
                 ->required()
                 ->maxLength(255),
-            // ->hintAction(
-            //    Action::make(__('Open product url'))
-            //        ->icon('heroicon-o-link')
-            //        ->url(
-            //            function (Component $livewire): string {
-            //                /** @phpstan-ignore-next-line */
-            //                $record = $livewire->record;
-            //
-            //                return match (true) {
-            //                    is_a($record, Product::class) => route('product', ['product' => $record->slug]),
-            //                    is_a($record, ProductComplement::class) => route('complement', ['productComplement' => $record->slug]),
-            //                    is_a($record, ProductSparePart::class) => route('spare-part', ['productSparePart' => $record->slug]),
-            //                    default => route('home')
-            //                };
-            //            },
-            //            shouldOpenInNewTab: true
-            //        )
-            // ),
 
             TextInput::make('slug')
                 ->disabled(),
-
-            // Forms\Components\TextInput::make('slogan')
-            //    ->required()
-            //    ->maxLength(255),
-            //
-            // Forms\Components\TextInput::make('meta_description')
-            //    ->label(__('Meta description'))
-            //    ->required()
-            //    ->columnSpan('full')
-            //    ->maxLength(255),
 
         ])->columns(2);
     }
@@ -90,11 +56,6 @@ trait FormBuilderTrait
                     ->suffix('€')
                     ->numeric(),
 
-                // Forms\Components\TextInput::make('stock')
-                //    ->required()
-                //    ->numeric()
-                //    ->integer(),
-
             ])->columns(3);
     }
 
@@ -112,16 +73,6 @@ trait FormBuilderTrait
                     ->label(__('Price with discount'))
                     ->suffix('€')
                     ->numeric(),
-
-                // Forms\Components\TextInput::make('price_when_user_owns_product')
-                //    ->label(__('Price when user owns parent product'))
-                //    ->suffix('€')
-                //    ->numeric(),
-
-                // Forms\Components\TextInput::make('stock')
-                //    ->required()
-                //    ->numeric()
-                //    ->integer(),
 
             ])->columns(2);
     }
@@ -210,16 +161,6 @@ trait FormBuilderTrait
                     ->orientImagesFromExif(false)
                     ->preserveFilenames()
                     ->directory(config('custom.product-image-storage')),
-
-                // Forms\Components\FileUpload::make('images')
-                //    ->label(__('Additional images'))
-                //    ->multiple()
-                //    ->required()
-                //    ->reorderable()
-                //    ->moveFiles()
-                //    ->orientImagesFromExif(false)
-                //    ->preserveFilenames()
-                //    ->directory(config('custom.product-image-storage')),
 
             ])->columns(2);
     }

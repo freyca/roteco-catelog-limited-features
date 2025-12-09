@@ -21,15 +21,6 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         $price = fake()->randomFloat(2, 10, 3000);
-        $mandatory_assembly = false;
-        $assembly_price = 0;
-
-        $can_be_assembled = fake()->boolean(70);
-
-        if ($can_be_assembled === true) {
-            $mandatory_assembly = fake()->boolean();
-            $assembly_price = fake()->randomFloat(2, 50, 500);
-        }
 
         $name = fake()->unique()->catchPhrase();
 

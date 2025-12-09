@@ -128,7 +128,6 @@ describe('Order Notifications', function () {
                 'orderable_type' => ProductSparePart::class,
                 'quantity' => 2,
                 'unit_price' => $sparePart->price,
-                'assembly_price' => 0,
             ]);
 
             Notification::assertSentTo($user, OrderConfirmationNotification::class);
@@ -201,7 +200,6 @@ describe('Order Notifications', function () {
                 'orderable_type' => ProductSparePart::class,
                 'quantity' => 3,
                 'unit_price' => $sparePart->price,
-                'assembly_price' => 0,
             ]);
 
             Notification::assertSentTo(test()->admin, AdminOrderNotification::class);
@@ -275,7 +273,6 @@ describe('Order Notifications', function () {
                 'orderable_type' => ProductSparePart::class,
                 'quantity' => 1,
                 'unit_price' => $sparePart->price,
-                'assembly_price' => 0,
             ]);
 
             // Verify product was added

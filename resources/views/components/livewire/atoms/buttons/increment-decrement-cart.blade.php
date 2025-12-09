@@ -25,12 +25,12 @@
     @endphp
     <button wire:click="increment" type="button" id="increment-button" data-input-counter-increment="counter-input"
         class="inline-flex h-5 w-5 shrink-0 items-center justify-center"
-            @if (!$cart->canBeIncremented($product, $assemblyStatus, $variant))
+            @if (!$cart->canBeIncremented($product))
                 {{ 'disabled ' }}
             @endif
         >
 
-        @if (!$cart->canBeIncremented($product, $assemblyStatus, $variant))
+        @if (!$cart->canBeIncremented($product))
             @svg('heroicon-o-plus-circle')
         @else
             @svg('heroicon-s-plus-circle')

@@ -6,8 +6,4 @@
         @livewire('product.product-grid', key(md5('product.product-grid')), ['class_name' => \App\Models\ProductSparePart::class])
     </div>
 
-    @livewire('buttons.filter-button', key(md5('buttons.filter')))
-
-    @livewire('aside.filter', key(md5('aside.filter')), ['filters' => ['price' => true, 'features' => true]])
-
 </x-layouts.app>

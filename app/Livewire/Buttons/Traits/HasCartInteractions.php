@@ -13,13 +13,13 @@ trait HasCartInteractions
 
     public function add(Cart $cart): void
     {
-        if ($cart->add($this->product, 1, $this->assembly_status, $this->variant ?? null)) {
+        if ($cart->add($this->product, 1)) {
             Notification::make()->title(__('Product added correctly'))->success()->send();
         } else {
             Notification::make()->title(__('Failed to add product'))->danger()->send();
         }
 
-        $this->productQuantity = $cart->getTotalQuantityForProduct($this->product, $this->assembly_status, $this->variant ?? null);
+        $this->productQuantity = $cart->getTotalQuantityForProduct($this->product);
 
         $this->dispatch('refresh-cart');
     }
@@ -29,15 +29,13 @@ trait HasCartInteractions
         if ($cart->add(
             product: $this->product,
             quantity: 1,
-            assemble: $this->assembly_status,
-            variant: $this->variant ?? null,
         )) {
             Notification::make()->title(__('Product incremented'))->success()->send();
         } else {
             Notification::make()->title(__('Not enough stock'))->danger()->send();
         }
 
-        $this->productQuantity = $cart->getTotalQuantityForProduct($this->product, $this->assembly_status, $this->variant ?? null);
+        $this->productQuantity = $cart->getTotalQuantityForProduct($this->product);
 
         $this->dispatch('refresh-cart');
     }
@@ -47,11 +45,9 @@ trait HasCartInteractions
         $cart->add(
             product: $this->product,
             quantity: -1,
-            assemble: $this->assembly_status,
-            variant: $this->variant ?? null,
         );
 
-        $this->productQuantity = $cart->getTotalQuantityForProduct($this->product, $this->assembly_status, $this->variant ?? null);
+        $this->productQuantity = $cart->getTotalQuantityForProduct($this->product);
 
         Notification::make()->title(__('Product decremented'))->danger()->send();
 
@@ -62,11 +58,9 @@ trait HasCartInteractions
     {
         $cart->remove(
             product: $this->product,
-            assemble: $this->assembly_status,
-            variant: $this->variant ?? null,
         );
 
-        $this->productQuantity = $cart->getTotalQuantityForProduct($this->product, $this->assembly_status, $this->variant ?? null);
+        $this->productQuantity = $cart->getTotalQuantityForProduct($this->product);
 
         Notification::make()->title(__('Product removed from cart'))->danger()->send();
 

@@ -11,6 +11,9 @@ use Illuminate\Support\Collection;
 
 class EloquentOrderProductRepository implements OrderProductRepositoryInterface
 {
+    /**
+     * @param  Collection<int, OrderProductDTO>  $order_products
+     */
     public function save(Order $order, Collection $order_products): void
     {
         // Convert DTOs to OrderProduct models
@@ -21,7 +24,6 @@ class EloquentOrderProductRepository implements OrderProductRepositoryInterface
                 'orderable_type' => $dto->orderableType(),
                 'quantity' => $dto->quantity(),
                 'unit_price' => $dto->unitPrice(),
-                'assembly_price' => $dto->assemblyPrice(),
             ]);
         });
 

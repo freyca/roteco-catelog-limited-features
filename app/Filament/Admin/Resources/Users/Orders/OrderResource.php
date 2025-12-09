@@ -13,10 +13,7 @@ use App\Filament\Admin\Resources\Users\Orders\Pages\ListOrders;
 use App\Models\Address;
 use App\Models\BaseProduct;
 use App\Models\Order;
-use App\Models\Product;
-use App\Models\ProductComplement;
 use App\Models\ProductSparePart;
-use App\Models\ProductVariant;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -26,7 +23,6 @@ use Filament\Actions\ExportAction;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
@@ -35,7 +31,6 @@ use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Livewire\Component as Livewire;
 
 class OrderResource extends Resource
 {
@@ -191,9 +186,7 @@ class OrderResource extends Resource
                     ->label(__('Order date')),
             ])
             ->defaultSort('created_at', 'desc')
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make(),
             ])
@@ -206,9 +199,7 @@ class OrderResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
@@ -228,8 +219,6 @@ class OrderResource extends Resource
             ->schema([
                 Select::make('orderable_type')
                     ->options([
-                        // Product::class => 'Producto',
-                        // ProductComplement::class => 'Complemento',
                         ProductSparePart::class => 'Repuesto',
                     ])
                     ->afterStateUpdated(function (Set $set) {
@@ -269,61 +258,6 @@ class OrderResource extends Resource
                         'md' => 5,
                     ]),
 
-                Select::make('product_variant_id')
-                    ->label(__('Product variant'))
-                    ->options(function (Get $get) {
-                        return ProductVariant::where('product_id', $get('orderable_id'))->pluck('name', 'id');
-                    })
-                    ->afterStateUpdated(function ($state, Set $set, Livewire $livewire) {
-                        self::setProductPrice($state, ProductVariant::class, $set);
-                    })
-                    ->visible(function (Get $get) {
-                        if (! filled($get('orderable_type'))) {
-                            return false;
-                        }
-
-                        if (! str_ends_with($get('orderable_type'), 'Product')) {
-                            return false;
-                        }
-
-                        if (! filled($get('orderable_id'))) {
-                            return false;
-                        }
-
-                        /**
-                         * @var Product
-                         */
-                        $product = Product::find($get('orderable_id'));
-
-                        return $product->productVariants()->count() !== 0;
-                    })
-                    ->required(function (Get $get) {
-                        if (! filled($get('orderable_type'))) {
-                            return false;
-                        }
-
-                        if (! str_ends_with($get('orderable_type'), 'Product')) {
-                            return false;
-                        }
-
-                        if (! filled($get('orderable_id'))) {
-                            return false;
-                        }
-
-                        /**
-                         * @var Product
-                         */
-                        $product = Product::find($get('orderable_id'));
-
-                        return $product->productVariants()->count() !== 0;
-                    })
-                    ->searchable()
-                    ->live()
-                    ->distinct()
-                    ->columnSpan([
-                        'md' => 5,
-                    ]),
-
                 TextInput::make('quantity')
                     ->label(__('Quantity'))
                     ->numeric()
@@ -343,64 +277,6 @@ class OrderResource extends Resource
                     ->columnSpan([
                         'md' => 3,
                     ]),
-
-                Section::make(__('Assembly'))
-                    ->schema([
-                        Toggle::make('assembly')
-                            ->label(__('Assembly'))
-                            ->onIcon('heroicon-s-wrench-screwdriver')
-                            ->offIcon('heroicon-c-x-mark')
-                            ->afterStateUpdated(function ($state, Set $set, Get $get) {
-                                if ($state === false) {
-                                    $set('assembly_price', 0);
-
-                                    return;
-                                }
-
-                                /**
-                                 * @var ?Product
-                                 */
-                                $product = Product::find($get('orderable_id'));
-
-                                $set('assembly_price', $product?->assembly_price);
-                            })
-                            ->inline(false)
-                            ->formatStateUsing(function (Get $get) {
-                                return intval($get('assembly_price')) !== 0;
-                            })
-                            ->default(false),
-
-                        TextInput::make('assembly_price')
-                            ->label(__('Assembly price'))
-                            ->disabled()
-                            ->dehydrated()
-                            ->numeric()
-                            ->suffix('€')
-                            ->required()
-                            ->default(0),
-                    ])
-                    ->columns(3)
-                    ->collapsible()
-                    ->visible(function (Get $get) {
-                        if (! filled($get('orderable_type'))) {
-                            return false;
-                        }
-
-                        if (! str_ends_with($get('orderable_type'), 'Product')) {
-                            return false;
-                        }
-
-                        if (! filled($get('orderable_id'))) {
-                            return false;
-                        }
-
-                        /**
-                         * @var Product
-                         */
-                        $product = Product::find($get('orderable_id'));
-
-                        return $product->can_be_assembled === true;
-                    }),
             ])
             ->defaultItems(1)
             ->columns([

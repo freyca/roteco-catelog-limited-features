@@ -34,12 +34,12 @@ class UserResource extends Resource
                 Section::make([
                     TextInput::make('id')
                         ->disabled()
-                        ->label('ID')
-                        ->columnSpanFull(),
-                    // Forms\Components\ToggleButtons::make('role')
-                    //    ->inline()
-                    //    ->required()
-                    //    ->options(Role::class),
+                        ->label('ID'),
+                    Forms\Components\ToggleButtons::make('role')
+                        ->inline()
+                        ->required()
+                        ->default(Role::Customer->value)
+                        ->options(Role::class),
                     TextInput::make('name')
                         ->required()
                         ->label(__('Name')),

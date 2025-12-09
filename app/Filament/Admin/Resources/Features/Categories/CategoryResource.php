@@ -13,7 +13,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ImportAction;
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -22,7 +21,6 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use FilamentTiptapEditor\TiptapEditor;
 
 class CategoryResource extends Resource
 {
@@ -43,15 +41,6 @@ class CategoryResource extends Resource
                         ->maxLength(255),
                     TextInput::make('slug')
                         ->disabled(),
-                    // Forms\Components\TextInput::make('meta_description')
-                    //    ->label(__('Meta description'))
-                    //    ->required()
-                    //    ->columnSpanFull()
-                    //    ->maxLength(255),
-                    // TiptapEditor::make('description')
-                    //    ->label(__('Description'))
-                    //    ->required()
-                    //    ->columnSpanFull(),
                 ])->columns(2),
 
                 FileUpload::make('big_image')
@@ -61,13 +50,6 @@ class CategoryResource extends Resource
                     ->preserveFilenames()
                     ->orientImagesFromExif(false)
                     ->directory(config('custom.category-image-storage')),
-                // Forms\Components\FileUpload::make('small_image')
-                //    ->label(__('Small image'))
-                //    ->required()
-                //    ->moveFiles()
-                //    ->preserveFilenames()
-                //    ->orientImagesFromExif(false)
-                //    ->directory('category-images'),
             ]);
     }
 

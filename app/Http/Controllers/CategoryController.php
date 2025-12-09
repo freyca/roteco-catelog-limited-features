@@ -22,7 +22,7 @@ class CategoryController extends Controller
             'categories' => $this->repository->getAll(),
             // 'seotags' => new SeoTags('categories'),
             'breadcrumbs' => new StandardPageBreadCrumbs([
-                __('Categories') => route('category-list'), // @phpstan-ignore-line
+                __('Categories') => route('category-list'),
             ]),
         ]);
     }
@@ -34,8 +34,8 @@ class CategoryController extends Controller
             'products' => $this->repository->getProducts($category),
             // 'seotags' => new SeoTags($category),
             'breadcrumbs' => new StandardPageBreadCrumbs([
-                __('Categories') => route('category-list'), // @phpstan-ignore-line
-                __($category->name) => $category->slug, // @phpstan-ignore-line
+                __('Categories') => route('category-list'),
+                __($category->name) => $category->slug,
             ]),
         ]);
     }

@@ -12,9 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Disassembly extends Model
 {
-    /** @use HasFactory<DisassemblyFactory> */
     use HasFactory;
-
     use SoftDeletes;
 
     protected $fillable = [
