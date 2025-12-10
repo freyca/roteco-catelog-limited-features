@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Enums\PaymentMethod;
 use App\Models\Order;
 use App\Repositories\Payment\BankTransferPaymentRepository;
-use App\Repositories\Payment\BizumPaymentRepository;
-use App\Repositories\Payment\CreditCardPaymentRepository;
 use App\Repositories\Payment\PaymentRepositoryInterface;
-use App\Repositories\Payment\PayPalPaymentRepository;
 use Illuminate\Http\Request;
 
 final class Payment
@@ -19,12 +15,7 @@ final class Payment
 
     public function __construct(private Order $order)
     {
-        $this->repository = match ($this->order->payment_method) {
-            PaymentMethod::Card => app(CreditCardPaymentRepository::class),
-            PaymentMethod::Bizum => app(BizumPaymentRepository::class),
-            PaymentMethod::PayPal => app(PayPalPaymentRepository::class),
-            default => app(BankTransferPaymentRepository::class),
-        };
+        $this->repository = app(BankTransferPaymentRepository::class);
     }
 
     public function payPurchase(): mixed
