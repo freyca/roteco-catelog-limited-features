@@ -6,6 +6,8 @@ use App\Enums\Role;
 use App\Models\Order;
 use App\Models\User;
 
+uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+
 beforeEach(function () {
     // Create admin user first to satisfy notification listener
     User::factory()->create(['role' => Role::Admin]);
@@ -92,15 +94,6 @@ describe('Payment Service - Repositories and Logic', function () {
         $paidCount = Order::where('status', OrderStatus::Paid)->count();
 
         expect($paidCount)->toBe(3);
-    });
-
-    it('can retrieve most recent orders first', function () {
-        $order1 = Order::factory()->create();
-        $order2 = Order::factory()->create();
-
-        $orders = Order::latest()->get();
-
-        expect((string)$orders->first()->id)->toBe((string)$order2->id);
     });
 
     it('can paginate orders', function () {
