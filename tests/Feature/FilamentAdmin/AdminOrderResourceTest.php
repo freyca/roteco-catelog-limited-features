@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Livewire\Livewire;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     test()->admin = User::factory()->create(['role' => Role::Admin]);
@@ -72,6 +73,15 @@ describe('AdminOrderResource', function () {
     });
 
     it('can export orders via table action', function () {
+        // Clean up export files before test
+        $exportDirs = Storage::disk('local')->directories('filament_exports');
+        foreach ($exportDirs as $dir) {
+            $files = Storage::disk('local')->files($dir);
+            foreach ($files as $file) {
+                Storage::disk('local')->delete($file);
+            }
+        }
+
         test()->actingAs(test()->admin);
         Order::factory(3)->create();
 
@@ -80,5 +90,27 @@ describe('AdminOrderResource', function () {
             ->mountTableAction('export')
             ->callMountedTableAction()
             ->assertHasNoTableActionErrors();
+
+        // Find all CSV files except headers and xlsx
+        $exportDirs = Storage::disk('local')->directories('filament_exports');
+        $dataCsvFiles = [];
+        foreach ($exportDirs as $dir) {
+            $files = Storage::disk('local')->files($dir);
+            foreach ($files as $file) {
+                if (str_ends_with($file, '.csv') && !str_contains($file, 'headers')) {
+                    $dataCsvFiles[] = $file;
+                }
+            }
+        }
+        expect($dataCsvFiles)->not->toBeEmpty();
+        $csv = Storage::disk('local')->get($dataCsvFiles[0]);
+        // Check CSV contains at least one order code
+        $order = Order::first();
+        expect($csv)->toContain($order->code);
+
+        // Clean up export files after test
+        foreach ($dataCsvFiles as $file) {
+            Storage::disk('local')->delete($file);
+        }
     });
 });

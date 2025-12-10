@@ -157,5 +157,8 @@ describe('CategoryResource', function () {
                 'file' => $fileOnDisk,
             ])->callMountedTableAction()
             ->assertHasNoTableActionErrors();
+        // Assert imported categories exist in DB
+        expect(Category::where('name', 'Imported Electronics')->where('slug', 'imported-electronics')->exists())->toBeTrue();
+        expect(Category::where('name', 'Imported Clothing')->where('slug', 'imported-clothing')->exists())->toBeTrue();
     });
 });

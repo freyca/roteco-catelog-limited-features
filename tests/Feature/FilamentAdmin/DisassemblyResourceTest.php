@@ -153,5 +153,8 @@ describe('DisassemblyResource', function () {
                 'file' => $fileOnDisk,
             ])->callMountedTableAction()
             ->assertHasNoTableActionErrors();
+        // Assert imported disassemblies exist in DB
+        expect(\App\Models\Disassembly::where('name', 'Imported Disassembly 1')->where('main_image', 'disasm1.jpg')->where('product_id', $product->id)->exists())->toBeTrue();
+        expect(\App\Models\Disassembly::where('name', 'Imported Disassembly 2')->where('main_image', 'disasm2.jpg')->where('product_id', $product->id)->exists())->toBeTrue();
     });
 });

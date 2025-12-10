@@ -47,17 +47,24 @@ class ProductSparePartImporter extends Importer
 
     public function resolveRecord(): ProductSparePart
     {
+        if (isset($this->data['id'])) {
+            $record = ProductSparePart::find($this->data['id']);
+            if ($record) {
+                return $record;
+            }
+        }
+        // Fallback to ean13 as unique key
         return ProductSparePart::firstOrNew([
-            'id' => $this->data['id'],
+            'ean13' => $this->data['ean13'],
         ]);
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your product spare part import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
+        $body = 'Your product spare part import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
+            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
         }
 
         return $body;
