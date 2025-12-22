@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('reference')->unique();
             $table->string('name')->unique();
             $table->string('slug')->unique();
+            $table->integer('number_in_image');
+            $table->string('self_reference')->nullable();
             $table->integer('price');
             $table->integer('price_with_discount')->nullable();
             $table->foreignIdFor(Disassembly::class)->constrained();

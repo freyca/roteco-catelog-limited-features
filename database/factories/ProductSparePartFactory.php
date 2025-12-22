@@ -27,6 +27,8 @@ class ProductSparePartFactory extends Factory
             'name' => $name,
             'slug' => str()->slug($name),
             'reference' => fake()->unique()->bothify('REF-########'),
+            'number_in_image' => fake()->numberBetween(1, 99),
+            'self_reference' => fake()->optional()->bothify('REF-####'),
             'price' => $price,
             'price_with_discount' => $this->isProductDiscounted($price),
             'published' => fake()->boolean(75),
@@ -54,7 +56,7 @@ class ProductSparePartFactory extends Factory
      */
     public function published(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'published' => true,
         ]);
     }

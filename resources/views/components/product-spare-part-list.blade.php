@@ -4,7 +4,7 @@
         <div class="py-2 grid grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_auto] gap-1 border-b border-gray-300">
             <div
                 class="text-left row-start-1 md:col-auto md:row-auto flex items-center">
-                ⚙️ - {{ $spare_part->name }}
+                {{ $spare_part->number_in_image }} - {{ $spare_part->name }} - {{ $spare_part->reference }}
             </div>
 
             <div

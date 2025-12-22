@@ -23,6 +23,11 @@ class ProductSparePartImporter extends Importer
             ImportColumn::make('name')
                 ->requiredMapping()
                 ->rules(['required', 'max:255']),
+            ImportColumn::make('number_in_image')
+                ->numeric()
+                ->rules(['required', 'integer']),
+            ImportColumn::make('self_reference')
+                ->rules(['nullable', 'max:255']),
             ImportColumn::make('price')
                 ->requiredMapping()
                 ->numeric()

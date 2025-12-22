@@ -23,9 +23,15 @@ class ProductSparePart extends BaseProduct
     {
         $this->mergeFillable([
             'disassembly_id',
+            'number_in_image',
+            'self_reference',
         ]);
-
         parent::__construct($attributes);
+    }
+
+    public function setSelfReferenceAttribute($value)
+    {
+        $this->attributes['self_reference'] = $value === '' ? null : $value;
     }
 
     /**
