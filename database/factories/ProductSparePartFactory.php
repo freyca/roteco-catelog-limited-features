@@ -30,7 +30,7 @@ class ProductSparePartFactory extends Factory
             'number_in_image' => fake()->numberBetween(1, 99),
             'self_reference' => fake()->optional()->bothify('REF-####'),
             'price' => $price,
-            'price_with_discount' => $this->isProductDiscounted($price),
+            'price_with_discount' => fake()->randomFloat(2, 10, $price - 1),
             'published' => fake()->boolean(75),
             'disassembly_id' => Disassembly::inRandomOrder()->first()?->id ?? Disassembly::factory(),
             // 'price_when_user_owns_product' => $price * 0.8,

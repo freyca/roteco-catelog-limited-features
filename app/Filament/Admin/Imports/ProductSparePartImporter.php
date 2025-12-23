@@ -34,7 +34,7 @@ class ProductSparePartImporter extends Importer
                 ->rules(['required', 'integer']),
             ImportColumn::make('price_with_discount')
                 ->numeric()
-                ->rules(['nullable', 'integer']),
+                ->rules(['integer']),
             ImportColumn::make('published')
                 ->requiredMapping()
                 ->boolean()

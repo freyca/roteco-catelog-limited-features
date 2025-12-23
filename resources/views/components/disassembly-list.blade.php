@@ -1,11 +1,9 @@
 <div id="accordion-collapse" data-accordion="collapse">
     @php
-        $counter=1;
+        $counter=1; // Initialize counter for accordion items
     @endphp
+
     @foreach ($relatedDisassemblies as $disassembly)
-        @php
-            $image = $disassembly->main_image;
-        @endphp
         <h2 id="accordion-collapse-heading-{{ $counter }}" onclick="changeImage( {{ $disassembly }} )">
             <button type="button" class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl hover:bg-gray-100 gap-3" data-accordion-target="#accordion-collapse-body-{{ $counter }}" aria-expanded="false" aria-controls="accordion-collapse-body-{{  $counter }}">
                 <span>{{ $disassembly->name }}</span>
@@ -14,12 +12,15 @@
                 </svg>
             </button>
         </h2>
+
         <div id="accordion-collapse-body-{{ $counter }}" class="hidden" aria-labelledby="accordion-collapse-heading-{{ $counter }}">
             @php
                 $relatedSpareParts=$disassembly->productSpareParts;
             @endphp
+
             <x-product-spare-part-list :relatedSpareparts=$relatedSpareParts />
         </div>
+
         @php
             $counter++
         @endphp

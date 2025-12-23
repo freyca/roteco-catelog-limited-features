@@ -44,14 +44,15 @@ trait FormBuilderTrait
         return Section::make(__('Pricing'))
             ->schema([
                 TextInput::make('price')
-                    ->label(__('Precio'))
+                    ->label(__('Price PVP'))
                     ->numeric()
                     ->suffix('€')
                     ->required(),
 
                 TextInput::make('price_with_discount')
-                    ->label(__('Price with discount'))
+                    ->label(__('Price to retailer'))
                     ->suffix('€')
+                    ->required()
                     ->numeric(),
 
             ])->columns(3);
@@ -62,14 +63,15 @@ trait FormBuilderTrait
         return Section::make(__('Pricing'))
             ->schema([
                 TextInput::make('price')
-                    ->label(__('Precio'))
+                    ->label(__('Price PVP'))
                     ->numeric()
                     ->suffix('€')
                     ->required(),
 
                 TextInput::make('price_with_discount')
-                    ->label(__('Price with discount'))
+                    ->label(__('Price to retailer'))
                     ->suffix('€')
+                    ->required()
                     ->numeric(),
 
             ])->columns(2);

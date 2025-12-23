@@ -75,10 +75,6 @@ class ProductSparePartResource extends Resource
                 TextColumn::make('id')
                     ->sortable(),
 
-                ImageColumn::make('main_image')
-                    ->circular()
-                    ->label(__('Image')),
-
                 TextColumn::make('name')
                     ->label(__('Name'))
                     ->searchable()

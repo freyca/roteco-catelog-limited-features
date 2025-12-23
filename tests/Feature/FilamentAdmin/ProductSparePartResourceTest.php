@@ -55,6 +55,7 @@ describe('ProductSparePartResource', function () {
                 'reference' => 'REF-12345678',
                 'slug' => 'new-spare-part',
                 'price' => 100,
+                'price_with_discount' => 80,
                 'published' => true,
                 'disassembly_id' => $disassembly->id,
                 'number_in_image' => 1,
@@ -171,6 +172,7 @@ describe('ProductSparePartResource', function () {
                 'reference' => 'REF-OPTIONAL',
                 'slug' => 'test-disassembly',
                 'price' => 100,
+                'price_with_discount' => 80,
                 'published' => true,
                 'disassembly_id' => $disassembly->id,
                 'number_in_image' => 7,
@@ -220,7 +222,7 @@ describe('ProductSparePartResource', function () {
         ]);
 
         // Create a fake CSV file with correct headers and data matching ProductSparePartImporter
-        $csvContent = "reference,name,number_in_image,self_reference,price,price_with_discount,published,disassembly_id\nREF-1111,Imported Spare 1,1,,100,,1,{$disassembly->id}\nREF-2222,Imported Spare 2,2,,200,,1,{$disassembly->id}\n";
+        $csvContent = "reference,name,number_in_image,self_reference,price,price_with_discount,published,disassembly_id\nREF-1111,Imported Spare 1,1,,100,80,1,{$disassembly->id}\nREF-2222,Imported Spare 2,2,,200,180,1,{$disassembly->id}\n";
         $fileOnDisk = UploadedFile::fake()->createWithContent('sp.csv', $csvContent);
 
         // Test the import action through Livewire

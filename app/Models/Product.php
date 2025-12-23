@@ -39,15 +39,6 @@ class Product extends BaseProduct
     }
 
     /**
-     * The event map for the model.
-     *
-     * @var array<string, string>
-     */
-    protected $dispatchesEvents = [
-        'deleting' => ProductDeleted::class,
-    ];
-
-    /**
      * @return BelongsTo<Category, $this>
      */
     public function category(): BelongsTo
