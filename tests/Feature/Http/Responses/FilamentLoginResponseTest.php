@@ -1,25 +1,24 @@
 <?php
 
-use App\Enums\Role;
 use App\Http\Responses\FilamentLoginResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 beforeEach(function () {
-    test()->admin = User::factory()->create(['role' => Role::Admin]);
-    test()->customer = User::factory()->create(['role' => Role::Customer]);
+    test()->admin = User::factory()->admin_notifiable()->create();
+    test()->customer = User::factory()->customer()->create();
 });
 
 describe('FilamentLoginResponse', function () {
     it('is instance of LoginResponse contract', function () {
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
 
         expect($response)->toBeInstanceOf(\Filament\Auth\Http\Responses\Contracts\LoginResponse::class);
     });
 
     it('redirects admin to admin panel', function () {
         test()->actingAs(test()->admin);
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
         $request = Request::create('/login', 'POST');
 
         $result = $response->toResponse($request);
@@ -29,7 +28,7 @@ describe('FilamentLoginResponse', function () {
 
     it('redirects customer to home', function () {
         test()->actingAs(test()->customer);
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
         $request = Request::create('/login', 'POST');
 
         $result = $response->toResponse($request);
@@ -39,7 +38,7 @@ describe('FilamentLoginResponse', function () {
 
     it('returns redirect response', function () {
         test()->actingAs(test()->customer);
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
         $request = Request::create('/login', 'POST');
 
         $result = $response->toResponse($request);
@@ -49,7 +48,7 @@ describe('FilamentLoginResponse', function () {
 
     it('redirects correctly for admin user', function () {
         auth()->login(test()->admin);
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
         $request = Request::create('/login', 'POST');
 
         $result = $response->toResponse($request);
@@ -59,7 +58,7 @@ describe('FilamentLoginResponse', function () {
 
     it('redirects correctly for customer user', function () {
         auth()->login(test()->customer);
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
         $request = Request::create('/login', 'POST');
 
         $result = $response->toResponse($request);

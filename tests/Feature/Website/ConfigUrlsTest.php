@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Role;
 use App\Models\User;
 use Filament\Facades\Filament;
 
@@ -38,10 +37,8 @@ test('standard users cannot access admin panel', function () {
 });
 
 test('admin users accesing user panel are redirected to admin panel', function () {
-    $user = User::factory()->create();
-    $user->role = Role::Admin;
-    $user->save();
-    actingAs($user);
+    test()->admin = User::factory()->admin_notifiable()->create();
+    actingAs(test()->admin);
 
     $response = get(Filament::getPanel('user')->getUrl());
 

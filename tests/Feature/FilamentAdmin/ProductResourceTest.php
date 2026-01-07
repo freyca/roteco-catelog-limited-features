@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Role;
 use App\Filament\Admin\Resources\Products\Products\Pages\CreateProduct;
 use App\Filament\Admin\Resources\Products\Products\Pages\EditProduct;
 use App\Filament\Admin\Resources\Products\Products\Pages\ListProducts;
@@ -13,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 beforeEach(function () {
-    test()->admin = User::factory()->create(['role' => Role::Admin]);
+    test()->admin = User::factory()->admin_notifiable()->create();
 
     Filament::setCurrentPanel(
         Filament::getPanel('admin')
@@ -127,7 +126,6 @@ describe('ProductResource', function () {
         $component->fillForm(['name' => 'Updated Name'])->call('save');
         expect(Product::find($product->id)->name)->toBe('Updated Name');
     });
-
 
     it('product resource has correct navigation group', function () {
         $group = \App\Filament\Admin\Resources\Products\Products\ProductResource::getNavigationGroup();

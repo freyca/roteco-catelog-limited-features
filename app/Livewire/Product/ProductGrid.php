@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Livewire\Product;
 
-use App\Models\ProductSparePart;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;
 use Livewire\Attributes\On;

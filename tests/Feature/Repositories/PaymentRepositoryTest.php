@@ -9,9 +9,7 @@ use App\Models\User;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 beforeEach(function () {
-    // Create admin user first to satisfy notification listener
-    User::factory()->create(['role' => Role::Admin]);
-
+    test()->admin = User::factory()->admin_notifiable()->create();
     test()->user = User::factory()->create(['role' => Role::Customer]);
 });
 

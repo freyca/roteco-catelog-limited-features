@@ -7,7 +7,7 @@ use Livewire\Livewire;
 
 beforeEach(function () {
     // Create an admin user for notifications
-    User::factory()->create(['role' => \App\Enums\Role::Admin]);
+    test()->admin = User::factory()->admin_notifiable()->create();
     test()->user = User::factory()->create();
     test()->otherUser = User::factory()->create();
 });

@@ -1,17 +1,12 @@
 <?php
 
-use App\Enums\OrderStatus;
-use App\Enums\PaymentMethod;
-use App\Enums\Role;
 use App\Filament\Admin\Widgets\OrderStatsOverview;
 use App\Filament\Admin\Widgets\OrderStatusChart;
 use App\Filament\Admin\Widgets\RevenueChart;
-use App\Models\Order;
 use App\Models\User;
 
 beforeEach(function () {
-    // Create admin user
-    test()->admin = User::factory()->create(['role' => Role::Admin]);
+    test()->admin = User::factory()->admin_notifiable()->create();
 });
 
 describe('Filament Admin Dashboard', function () {

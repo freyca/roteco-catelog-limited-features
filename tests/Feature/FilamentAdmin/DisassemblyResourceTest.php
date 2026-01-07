@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Role;
 use App\Filament\Admin\Resources\Products\Disassemblies\Pages\CreateDisassembly;
 use App\Filament\Admin\Resources\Products\Disassemblies\Pages\EditDisassembly;
 use App\Filament\Admin\Resources\Products\Disassemblies\Pages\ListDisassemblies;
@@ -13,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 beforeEach(function () {
-    test()->admin = User::factory()->create(['role' => Role::Admin]);
+    test()->admin = User::factory()->admin_notifiable()->create();
 
     Filament::setCurrentPanel(
         Filament::getPanel('admin')
@@ -110,7 +109,6 @@ describe('DisassemblyResource', function () {
         $component->fillForm(['name' => 'Updated Name'])->call('save');
         expect(Disassembly::find($disassembly->id)->name)->toBe('Updated Name');
     });
-
 
     it('disassembly resource has correct navigation group', function () {
         $group = \App\Filament\Admin\Resources\Products\Disassemblies\DisassemblyResource::getNavigationGroup();

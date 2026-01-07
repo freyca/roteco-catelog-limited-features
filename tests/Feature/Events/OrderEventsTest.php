@@ -1,14 +1,13 @@
 <?php
 
-use App\Enums\Role;
+use App\Events\OrderCreated;
 use App\Models\Order;
 use App\Models\User;
-use App\Events\OrderCreated;
 use Illuminate\Support\Facades\Event;
 
 beforeEach(function () {
-    test()->admin = User::factory()->create(['role' => Role::Admin]);
-    test()->user = User::factory()->create(['role' => Role::Customer]);
+    test()->admin = User::factory()->admin_notifiable()->create();
+    test()->user = User::factory()->customer()->create();
     test()->order = Order::factory()->create(['user_id' => test()->user->id]);
 });
 

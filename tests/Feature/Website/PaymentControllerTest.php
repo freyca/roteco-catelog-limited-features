@@ -7,7 +7,7 @@ use App\Models\User;
 beforeEach(function () {
     // Create an authenticated user and an admin user for the tests
     test()->user = User::factory()->create(['role' => Role::Customer]);
-    User::factory()->create(['role' => Role::Admin]);
+    test()->admin = User::factory()->admin_notifiable()->create();
 });
 
 describe('PaymentController', function () {

@@ -1,18 +1,17 @@
 <?php
 
 use App\Enums\OrderStatus;
-use App\Enums\Role;
 use App\Filament\Admin\Widgets\OrderStatusChart;
 use App\Models\Order;
 use App\Models\User;
 
 beforeEach(function () {
-    test()->admin = User::factory()->create(['role' => Role::Admin]);
+    test()->admin = User::factory()->admin_notifiable()->create();
 });
 
 describe('OrderStatusChart Widget', function () {
     it('returns chart data structure', function () {
-        $widget = new OrderStatusChart();
+        $widget = new OrderStatusChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -23,13 +22,13 @@ describe('OrderStatusChart Widget', function () {
     });
 
     it('has correct chart heading', function () {
-        $widget = new OrderStatusChart();
+        $widget = new OrderStatusChart;
 
         expect($widget->getHeading())->toBe(__('Orders by Status'));
     });
 
     it('includes all order statuses in labels', function () {
-        $widget = new OrderStatusChart();
+        $widget = new OrderStatusChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -42,7 +41,7 @@ describe('OrderStatusChart Widget', function () {
         Order::factory(3)->create(['status' => OrderStatus::PaymentPending]);
         Order::factory(2)->create(['status' => OrderStatus::Delivered]);
 
-        $widget = new OrderStatusChart();
+        $widget = new OrderStatusChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -52,7 +51,7 @@ describe('OrderStatusChart Widget', function () {
     });
 
     it('has correct dataset label', function () {
-        $widget = new OrderStatusChart();
+        $widget = new OrderStatusChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -61,7 +60,7 @@ describe('OrderStatusChart Widget', function () {
     });
 
     it('dataset has background colors', function () {
-        $widget = new OrderStatusChart();
+        $widget = new OrderStatusChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -71,7 +70,7 @@ describe('OrderStatusChart Widget', function () {
     });
 
     it('dataset has border colors', function () {
-        $widget = new OrderStatusChart();
+        $widget = new OrderStatusChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -81,7 +80,7 @@ describe('OrderStatusChart Widget', function () {
     });
 
     it('has correct chart type', function () {
-        $widget = new OrderStatusChart();
+        $widget = new OrderStatusChart;
         $reflection = new ReflectionMethod($widget, 'getType');
         $reflection->setAccessible(true);
         $type = $reflection->invoke($widget);

@@ -46,6 +46,17 @@ class UserFactory extends Factory
     }
 
     /**
+     * Create an admin user that should be notified.
+     */
+    public function admin_notifiable(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => Role::Admin,
+            'email' => config('custom.admin_email'),
+        ]);
+    }
+
+    /**
      * Create a customer user.
      */
     public function customer(): static

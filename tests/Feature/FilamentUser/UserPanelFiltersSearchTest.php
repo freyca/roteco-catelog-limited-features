@@ -88,7 +88,7 @@ describe('Address filters and search', function () {
 describe('Order filters and search', function () {
     beforeEach(function () {
         // Create an admin for notification events
-        User::factory()->create(['role' => \App\Enums\Role::Admin]);
+        test()->admin = User::factory()->admin_notifiable()->create();
         test()->user = User::factory()->create();
         test()->actingAs(test()->user);
     });

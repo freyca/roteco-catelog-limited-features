@@ -12,6 +12,10 @@ use Livewire\Livewire;
 
 use function Pest\Laravel\get;
 
+beforeEach(function () {
+    test()->admin = User::factory()->admin_notifiable()->create();
+});
+
 test('user can visit home and login', function () {
     // Visit home page (may redirect if not authenticated)
     $response = get('/');
@@ -124,9 +128,6 @@ test('user can complete checkout by submitting the checkout form', function () {
             ->call('add');
     }
 
-    // Create admin user for notifications
-    $admin = User::factory()->admin()->create();
-
     // Visit checkout page to verify form is present
     $response = get('/carrito');
     $response->assertStatus(200);
@@ -176,5 +177,5 @@ test('user can complete checkout by submitting the checkout form', function () {
     Notification::assertSentTo($user, OrderConfirmationNotification::class);
 
     // Verify admin was notified
-    Notification::assertSentTo($admin, AdminOrderNotification::class);
+    Notification::assertSentTo(test()->admin, AdminOrderNotification::class);
 });

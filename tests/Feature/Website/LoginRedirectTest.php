@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 describe('LoginRedirect', function () {
     it('redirects admin users to /admin after login', function () {
-        $admin = User::factory()->create(['role' => Role::Admin]);
+        $admin = User::factory()->admin_notifiable()->create();
 
         Auth::login($admin);
 

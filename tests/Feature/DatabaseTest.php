@@ -36,7 +36,7 @@ test('db has items after been seeded', function () {
 test('order belongs to expected user and has product spare parts', function () {
     // Create test data
     $user = User::factory()->create();
-    User::factory()->admin()->create();
+    test()->admin = User::factory()->admin_notifiable()->create();
 
     $disassembly = Disassembly::factory()->create();
     $spareParts = ProductSparePart::factory(3)->create([

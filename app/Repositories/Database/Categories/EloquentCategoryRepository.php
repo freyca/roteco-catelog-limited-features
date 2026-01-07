@@ -9,7 +9,6 @@ use App\Models\Product;
 use App\Repositories\Database\Traits\CacheKeys;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Cache;
 
 class EloquentCategoryRepository implements CategoryRepositoryInterface
 {

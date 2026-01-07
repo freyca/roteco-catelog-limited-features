@@ -14,14 +14,8 @@ use Livewire\Livewire;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    test()->admin = User::factory()->admin()->create([
-        'email' => 'admin@example.com',
-    ]);
-    test()->customer = User::factory()->create([
-        'email' => 'customer@example.com',
-        'name' => 'John',
-        'surname' => 'Doe',
-    ]);
+    test()->admin = User::factory()->admin_notifiable()->create();
+    test()->customer = User::factory()->customer()->create();
     test()->actingAs(test()->admin);
 });
 

@@ -1,16 +1,15 @@
 <?php
 
-use App\Enums\Role;
 use App\Filament\Admin\Resources\Users\Orders\Pages\EditOrder;
 use App\Filament\Admin\Resources\Users\Orders\Pages\ListOrders;
 use App\Models\Order;
 use App\Models\User;
 use Filament\Facades\Filament;
-use Livewire\Livewire;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Livewire;
 
 beforeEach(function () {
-    test()->admin = User::factory()->create(['role' => Role::Admin]);
+    test()->admin = User::factory()->admin_notifiable()->create();
 
     Filament::setCurrentPanel(
         Filament::getPanel('admin')
@@ -97,7 +96,7 @@ describe('AdminOrderResource', function () {
         foreach ($exportDirs as $dir) {
             $files = Storage::disk('local')->files($dir);
             foreach ($files as $file) {
-                if (str_ends_with($file, '.csv') && !str_contains($file, 'headers')) {
+                if (str_ends_with($file, '.csv') && ! str_contains($file, 'headers')) {
                     $dataCsvFiles[] = $file;
                 }
             }

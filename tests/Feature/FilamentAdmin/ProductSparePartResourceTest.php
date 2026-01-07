@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Role;
 use App\Filament\Admin\Resources\Products\ProductSpareParts\Pages\CreateProductSparePart;
 use App\Filament\Admin\Resources\Products\ProductSpareParts\Pages\EditProductSparePart;
 use App\Filament\Admin\Resources\Products\ProductSpareParts\Pages\ListProductSpareParts;
@@ -16,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 beforeEach(function () {
-    test()->admin = User::factory()->create(['role' => Role::Admin]);
+    test()->admin = User::factory()->admin_notifiable()->create();
 
     Filament::setCurrentPanel(
         Filament::getPanel('admin')

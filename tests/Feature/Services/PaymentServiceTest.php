@@ -8,7 +8,7 @@ use App\Models\User;
 
 beforeEach(function () {
     // Create admin user first to satisfy notification listener
-    User::factory()->create(['role' => Role::Admin]);
+    test()->admin = User::factory()->admin_notifiable()->create();
 
     test()->user = User::factory()->create(['role' => Role::Customer]);
     test()->order = Order::factory()->create([

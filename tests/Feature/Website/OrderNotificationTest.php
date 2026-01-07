@@ -12,10 +12,13 @@ use Illuminate\Support\Facades\Notification;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
+beforeEach(function () {
+    test()->admin = User::factory()->admin_notifiable()->create();
+});
+
 describe('Order Notifications', function () {
     beforeEach(function () {
         Notification::fake();
-        test()->admin = User::factory()->admin()->create();
     });
 
     describe('OrderCreated Event', function () {

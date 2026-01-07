@@ -45,6 +45,7 @@ class ProductImporter extends Importer
                 return $record;
             }
         }
+
         // Fallback to reference as unique key
         return Product::firstOrNew([
             'reference' => $this->data['reference'],
