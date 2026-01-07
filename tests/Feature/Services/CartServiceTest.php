@@ -1,9 +1,9 @@
 <?php
 
 use App\Enums\Role;
-use App\Services\Cart;
 use App\Models\ProductSparePart;
 use App\Models\User;
+use App\Services\Cart;
 
 beforeEach(function () {
     test()->user = User::factory()->create(['role' => Role::Customer]);

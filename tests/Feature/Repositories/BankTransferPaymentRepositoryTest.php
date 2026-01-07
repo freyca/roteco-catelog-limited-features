@@ -126,7 +126,7 @@ describe('BankTransferPaymentRepository', function () {
 
         $orders = Order::where('payment_method', PaymentMethod::BankTransfer)->latest()->get();
 
-        expect((string)$orders->first()->id)->toBe((string)$order2->id);
+        expect((string) $orders->first()->id)->toBe((string) $order2->id);
     });
 
     it('retrieves bank transfer with zero results', function () {

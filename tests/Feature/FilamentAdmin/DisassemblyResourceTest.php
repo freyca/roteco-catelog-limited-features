@@ -111,7 +111,6 @@ describe('DisassemblyResource', function () {
         expect(Disassembly::find($disassembly->id)->name)->toBe('Updated Name');
     });
 
-
     it('disassembly resource has correct navigation group', function () {
         $group = \App\Filament\Admin\Resources\Products\Disassemblies\DisassemblyResource::getNavigationGroup();
         expect($group)->toBe(__('Products'));

@@ -12,7 +12,7 @@ beforeEach(function () {
 
 describe('RevenueChart Widget', function () {
     it('returns chart data structure', function () {
-        $widget = new RevenueChart();
+        $widget = new RevenueChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -23,13 +23,13 @@ describe('RevenueChart Widget', function () {
     });
 
     it('has correct chart heading', function () {
-        $widget = new RevenueChart();
+        $widget = new RevenueChart;
 
         expect($widget->getHeading())->toBe(__('Revenue (Last 7 Days)'));
     });
 
     it('includes last 7 days labels', function () {
-        $widget = new RevenueChart();
+        $widget = new RevenueChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -48,7 +48,7 @@ describe('RevenueChart Widget', function () {
             'created_at' => $today->copy(),
         ]);
 
-        $widget = new RevenueChart();
+        $widget = new RevenueChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -60,7 +60,7 @@ describe('RevenueChart Widget', function () {
     });
 
     it('has correct dataset label', function () {
-        $widget = new RevenueChart();
+        $widget = new RevenueChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -69,7 +69,7 @@ describe('RevenueChart Widget', function () {
     });
 
     it('dataset is filled', function () {
-        $widget = new RevenueChart();
+        $widget = new RevenueChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -78,7 +78,7 @@ describe('RevenueChart Widget', function () {
     });
 
     it('dataset has border color', function () {
-        $widget = new RevenueChart();
+        $widget = new RevenueChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -88,7 +88,7 @@ describe('RevenueChart Widget', function () {
     });
 
     it('dataset has background color', function () {
-        $widget = new RevenueChart();
+        $widget = new RevenueChart;
         $reflection = new ReflectionMethod($widget, 'getData');
         $reflection->setAccessible(true);
         $data = $reflection->invoke($widget);
@@ -98,7 +98,7 @@ describe('RevenueChart Widget', function () {
     });
 
     it('has correct chart type', function () {
-        $widget = new RevenueChart();
+        $widget = new RevenueChart;
         $reflection = new ReflectionMethod($widget, 'getType');
         $reflection->setAccessible(true);
         $type = $reflection->invoke($widget);
@@ -107,7 +107,7 @@ describe('RevenueChart Widget', function () {
     });
 
     it('chart options are present', function () {
-        $widget = new RevenueChart();
+        $widget = new RevenueChart;
         $reflection = new ReflectionMethod($widget, 'getOptions');
         $reflection->setAccessible(true);
         $options = $reflection->invoke($widget);

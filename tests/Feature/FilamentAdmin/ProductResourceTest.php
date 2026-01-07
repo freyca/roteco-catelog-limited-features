@@ -128,7 +128,6 @@ describe('ProductResource', function () {
         expect(Product::find($product->id)->name)->toBe('Updated Name');
     });
 
-
     it('product resource has correct navigation group', function () {
         $group = \App\Filament\Admin\Resources\Products\Products\ProductResource::getNavigationGroup();
         expect($group)->toBe(__('Products'));

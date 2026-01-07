@@ -7,7 +7,6 @@ namespace App\Repositories\Database\Product\Product;
 use App\Models\Product;
 use App\Repositories\Database\Traits\CacheKeys;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Cache;
 
 class EloquentProductRepository implements ProductRepositoryInterface
 {

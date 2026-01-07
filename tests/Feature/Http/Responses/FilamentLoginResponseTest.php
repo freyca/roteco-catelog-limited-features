@@ -12,14 +12,14 @@ beforeEach(function () {
 
 describe('FilamentLoginResponse', function () {
     it('is instance of LoginResponse contract', function () {
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
 
         expect($response)->toBeInstanceOf(\Filament\Auth\Http\Responses\Contracts\LoginResponse::class);
     });
 
     it('redirects admin to admin panel', function () {
         test()->actingAs(test()->admin);
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
         $request = Request::create('/login', 'POST');
 
         $result = $response->toResponse($request);
@@ -29,7 +29,7 @@ describe('FilamentLoginResponse', function () {
 
     it('redirects customer to home', function () {
         test()->actingAs(test()->customer);
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
         $request = Request::create('/login', 'POST');
 
         $result = $response->toResponse($request);
@@ -39,7 +39,7 @@ describe('FilamentLoginResponse', function () {
 
     it('returns redirect response', function () {
         test()->actingAs(test()->customer);
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
         $request = Request::create('/login', 'POST');
 
         $result = $response->toResponse($request);
@@ -49,7 +49,7 @@ describe('FilamentLoginResponse', function () {
 
     it('redirects correctly for admin user', function () {
         auth()->login(test()->admin);
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
         $request = Request::create('/login', 'POST');
 
         $result = $response->toResponse($request);
@@ -59,7 +59,7 @@ describe('FilamentLoginResponse', function () {
 
     it('redirects correctly for customer user', function () {
         auth()->login(test()->customer);
-        $response = new FilamentLoginResponse();
+        $response = new FilamentLoginResponse;
         $request = Request::create('/login', 'POST');
 
         $result = $response->toResponse($request);

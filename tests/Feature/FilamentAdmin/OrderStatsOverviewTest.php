@@ -14,7 +14,7 @@ describe('OrderStatsOverview Widget', function () {
     it('calculates total orders count', function () {
         Order::factory(5)->create();
 
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);
@@ -26,7 +26,7 @@ describe('OrderStatsOverview Widget', function () {
         Order::factory()->create(['purchase_cost' => 10000]);
         Order::factory()->create(['purchase_cost' => 5000]);
 
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);
@@ -38,7 +38,7 @@ describe('OrderStatsOverview Widget', function () {
         Order::factory(3)->create(['status' => OrderStatus::PaymentPending]);
         Order::factory(2)->create(['status' => OrderStatus::Delivered]);
 
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);
@@ -50,7 +50,7 @@ describe('OrderStatsOverview Widget', function () {
         Order::factory(2)->create(['status' => OrderStatus::PaymentPending]);
         Order::factory(4)->create(['status' => OrderStatus::Delivered]);
 
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);
@@ -59,7 +59,7 @@ describe('OrderStatsOverview Widget', function () {
     });
 
     it('returns four stats', function () {
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);
@@ -68,7 +68,7 @@ describe('OrderStatsOverview Widget', function () {
     });
 
     it('first stat is total orders', function () {
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);
@@ -77,7 +77,7 @@ describe('OrderStatsOverview Widget', function () {
     });
 
     it('second stat is total revenue', function () {
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);
@@ -86,7 +86,7 @@ describe('OrderStatsOverview Widget', function () {
     });
 
     it('third stat is pending orders', function () {
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);
@@ -95,7 +95,7 @@ describe('OrderStatsOverview Widget', function () {
     });
 
     it('fourth stat is completed orders', function () {
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);
@@ -104,7 +104,7 @@ describe('OrderStatsOverview Widget', function () {
     });
 
     it('stats have descriptions', function () {
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);
@@ -115,7 +115,7 @@ describe('OrderStatsOverview Widget', function () {
     });
 
     it('stats have colors', function () {
-        $widget = new OrderStatsOverview();
+        $widget = new OrderStatsOverview;
         $reflection = new ReflectionMethod($widget, 'getStats');
         $reflection->setAccessible(true);
         $stats = $reflection->invoke($widget);

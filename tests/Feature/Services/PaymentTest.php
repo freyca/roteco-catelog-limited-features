@@ -4,7 +4,7 @@ describe('Payment Service', function () {
     beforeEach(function () {
         \App\Models\User::factory()->create(['role' => \App\Enums\Role::Admin]);
         test()->order = \App\Models\Order::factory()->create([
-            'payment_method' => \App\Enums\PaymentMethod::BankTransfer
+            'payment_method' => \App\Enums\PaymentMethod::BankTransfer,
         ]);
         test()->service = new \App\Services\Payment(test()->order);
     });
@@ -28,8 +28,10 @@ describe('Payment Service', function () {
 
 describe('PaymentActions trait', function () {
     beforeEach(function () {
-        test()->trait = new class {
+        test()->trait = new class
+        {
             use \App\Repositories\Payment\Traits\PaymentActions;
+
             public function callConvertPriceToCents($price)
             {
                 return $this->convertPriceToCents($price);

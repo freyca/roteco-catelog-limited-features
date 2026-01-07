@@ -1,9 +1,9 @@
 <?php
 
 use App\Enums\Role;
+use App\Events\OrderCreated;
 use App\Models\Order;
 use App\Models\User;
-use App\Events\OrderCreated;
 use Illuminate\Support\Facades\Event;
 
 beforeEach(function () {

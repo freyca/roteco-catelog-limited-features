@@ -29,7 +29,6 @@ class ProductCard extends Component
         $this->quantity = $order_product->quantity();
         $this->related_product = $this->product->disassembly->product;
 
-
         $this->path = match (true) {
             default => '/producto',
         };

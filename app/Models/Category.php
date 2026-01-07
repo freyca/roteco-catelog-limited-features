@@ -17,7 +17,6 @@ class Category extends Model
 
     use HasSlug;
 
-
     protected $fillable = [
         'name',
         'slug',
