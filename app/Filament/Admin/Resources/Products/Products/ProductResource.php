@@ -102,7 +102,7 @@ class ProductResource extends Resource
                         ])
                         ->columns(2)
                         ->collapsed()
-                        ->itemLabel(fn (array $state): ?string => $state['name'] ?? null),
+                        ->itemLabel(fn(array $state): ?string => $state['name'] ?? null),
                 ]),
 
             ]);

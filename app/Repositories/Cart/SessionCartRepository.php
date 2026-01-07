@@ -220,7 +220,7 @@ class SessionCartRepository implements CartRepositoryInterface
         });
 
         if ($match->count() !== 1) {
-            throw new Exception('Found '.$match->count().' matches of product in cart');
+            throw new Exception('Found ' . $match->count() . ' matches of product in cart');
         }
 
         $key = $match->keys()->first();

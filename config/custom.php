@@ -77,4 +77,9 @@ return [
      * Stock safety
      */
     'stock-safety' => 3,
+
+    /**
+     * Mail where admin notifications will be sent
+     */
+    'mail_admin_address' => env('MAIL_ADMIN_ADDRESS'),
 ];
