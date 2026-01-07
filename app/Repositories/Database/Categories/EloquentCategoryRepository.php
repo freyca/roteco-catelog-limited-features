@@ -17,20 +17,14 @@ class EloquentCategoryRepository implements CategoryRepositoryInterface
 
     public function getAll(): Collection
     {
-        $cacheKey = $this->generateCacheKey(__FUNCTION__);
-
         /**
          * @var Collection<int, Category>
          */
-        return Cache::remember($cacheKey, 3600, function () {
-            return Category::all();
-        });
+        return Category::where('published', true)->get();
     }
 
     public function getProducts(Category $category): LengthAwarePaginator
     {
-        $cacheKey = $this->generateCacheKey(__FUNCTION__);
-
         /**
          * @var LengthAwarePaginator<Product>
          */
@@ -39,15 +33,11 @@ class EloquentCategoryRepository implements CategoryRepositoryInterface
 
     public function featured(): Collection
     {
-        $cacheKey = $this->generateCacheKey(__FUNCTION__);
-
         /**
          * @var Collection<int, Category>
          */
-        return Cache::remember($cacheKey, 3600, function () {
-            $featured_categories = config('custom.featured-categories');
+        $featured_categories = config('custom.featured-categories');
 
-            return Category::whereIn('id', $featured_categories)->get();
-        });
+        return Category::whereIn('id', $featured_categories)->get();
     }
 }

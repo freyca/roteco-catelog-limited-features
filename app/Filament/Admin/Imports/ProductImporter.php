@@ -17,14 +17,10 @@ class ProductImporter extends Importer
     public static function getColumns(): array
     {
         return [
-            ImportColumn::make('ean13')
-                ->requiredMapping()
-                ->numeric()
-                ->rules(['required', 'integer']),
-            ImportColumn::make('name')
+            ImportColumn::make('reference')
                 ->requiredMapping()
                 ->rules(['required', 'max:255']),
-            ImportColumn::make('slug')
+            ImportColumn::make('name')
                 ->requiredMapping()
                 ->rules(['required', 'max:255']),
             ImportColumn::make('published')
@@ -43,17 +39,24 @@ class ProductImporter extends Importer
 
     public function resolveRecord(): Product
     {
+        if (isset($this->data['id'])) {
+            $record = Product::find($this->data['id']);
+            if ($record) {
+                return $record;
+            }
+        }
+        // Fallback to reference as unique key
         return Product::firstOrNew([
-            'id' => $this->data['id'],
+            'reference' => $this->data['reference'],
         ]);
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your product import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
+        $body = 'Your product import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
+            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
         }
 
         return $body;

@@ -59,8 +59,6 @@ class ProductResource extends Resource
                                             ->label(__('Name'))
                                             ->required()
                                             ->maxLength(255),
-                                        TextInput::make('slug')
-                                            ->disabled(),
                                     ])
                                         ->columns(2),
 
@@ -104,7 +102,7 @@ class ProductResource extends Resource
                         ])
                         ->columns(2)
                         ->collapsed()
-                        ->itemLabel(fn (array $state): ?string => $state['name'] ?? null),
+                        ->itemLabel(fn(array $state): ?string => $state['name'] ?? null),
                 ]),
 
             ]);

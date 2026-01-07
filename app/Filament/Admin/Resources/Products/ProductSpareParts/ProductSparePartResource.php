@@ -15,6 +15,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ImportAction;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -48,6 +49,15 @@ class ProductSparePartResource extends Resource
                             ->columnSpanFull()
                             ->searchable()
                             ->preload(),
+                        TextInput::make('number_in_image')
+                            ->label(__('Number in image'))
+                            ->required()
+                            ->integer()
+                            ->minValue(1),
+                        TextInput::make('self_reference')
+                            ->label(__('Self reference'))
+                            ->nullable()
+                            ->maxLength(255),
                     ]),
 
                 self::priceSectionWithParentProduct(),
@@ -64,10 +74,6 @@ class ProductSparePartResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->sortable(),
-
-                ImageColumn::make('main_image')
-                    ->circular()
-                    ->label(__('Image')),
 
                 TextColumn::make('name')
                     ->label(__('Name'))

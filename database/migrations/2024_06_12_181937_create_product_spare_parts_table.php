@@ -14,9 +14,11 @@ return new class extends Migration
     {
         Schema::create('product_spare_parts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('ean13')->unique();
+            $table->string('reference')->unique();
             $table->string('name')->unique();
             $table->string('slug')->unique();
+            $table->integer('number_in_image');
+            $table->string('self_reference')->nullable();
             $table->integer('price');
             $table->integer('price_with_discount')->nullable();
             $table->foreignIdFor(Disassembly::class)->constrained();

@@ -25,6 +25,7 @@ class CategoryFactory extends Factory
             // 'description' => fake()->realText(1000),
             'big_image' => 'category-images/sample-image.png',
             // 'small_image' => 'category-images/sample-image.png',
+            'published' => true,
         ];
     }
 }

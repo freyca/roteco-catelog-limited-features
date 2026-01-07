@@ -4,6 +4,9 @@ use App\Enums\Role;
 use App\Filament\Admin\Resources\Products\ProductSpareParts\Pages\CreateProductSparePart;
 use App\Filament\Admin\Resources\Products\ProductSpareParts\Pages\EditProductSparePart;
 use App\Filament\Admin\Resources\Products\ProductSpareParts\Pages\ListProductSpareParts;
+use App\Filament\Admin\Resources\Products\ProductSpareParts\ProductSparePartResource;
+use App\Models\Category;
+use App\Models\Disassembly;
 use App\Models\Product;
 use App\Models\ProductSparePart;
 use App\Models\User;
@@ -45,15 +48,18 @@ describe('ProductSparePartResource', function () {
 
     it('can create a new product spare part via form', function () {
         test()->actingAs(test()->admin);
-        $disassembly = \App\Models\Disassembly::factory()->create();
+        $disassembly = Disassembly::factory()->create();
         Livewire::test(CreateProductSparePart::class)
             ->fillForm([
                 'name' => 'New Spare Part',
-                'ean13' => 1234567890123,
+                'reference' => 'REF-12345678',
                 'slug' => 'new-spare-part',
                 'price' => 100,
+                'price_with_discount' => 80,
                 'published' => true,
                 'disassembly_id' => $disassembly->id,
+                'number_in_image' => 1,
+                'self_reference' => null,
             ])
             ->call('create')
             ->assertHasNoFormErrors();
@@ -74,21 +80,21 @@ describe('ProductSparePartResource', function () {
             ->assertHasFormErrors(['name' => 'required']);
     });
 
-    it('validates ean13 is required on create', function () {
+    it('validates reference is required on create', function () {
         test()->actingAs(test()->admin);
-        $disassembly = \App\Models\Disassembly::factory()->create();
+        $disassembly = Disassembly::factory()->create();
 
         Livewire::test(CreateProductSparePart::class)
             ->fillForm([
                 'name' => 'Test Spare Part',
-                'ean13' => null,
+                'reference' => '',
                 'slug' => 'test-spare-part',
                 'price' => 100,
                 'published' => true,
                 'disassembly_id' => $disassembly->id,
             ])
             ->call('create')
-            ->assertHasFormErrors(['ean13' => 'required']);
+            ->assertHasFormErrors(['reference' => 'required']);
     });
 
     it('validates disassembly is required on create', function () {
@@ -97,7 +103,7 @@ describe('ProductSparePartResource', function () {
         Livewire::test(CreateProductSparePart::class)
             ->fillForm([
                 'name' => 'Test Spare Part',
-                'ean13' => 1234567890123,
+                'reference' => 'REF-12345678',
                 'slug' => 'test-spare-part',
                 'price' => 100,
                 'published' => true,
@@ -140,38 +146,83 @@ describe('ProductSparePartResource', function () {
             ->assertHasFormErrors(['name' => 'required']);
     });
 
+    it('validates number_in_image is required on create', function () {
+        test()->actingAs(test()->admin);
+        $product = Product::factory()->create();
+        $file = UploadedFile::fake()->image('disasm.jpg');
+        Livewire::test(CreateProductSparePart::class)
+            ->fillForm([
+                'name' => 'Test Disassembly',
+                'number_in_image' => null,
+                'product_id' => $product->id,
+                'main_image' => $file,
+            ])
+            ->call('create')
+            ->assertHasFormErrors(['number_in_image' => 'required']);
+    });
+
+    it('self_reference is optional on create', function () {
+        test()->actingAs(test()->admin);
+        $disassembly = Disassembly::factory()->create();
+        $file = UploadedFile::fake()->image('disasm.jpg');
+
+        Livewire::test(CreateProductSparePart::class)
+            ->fillForm([
+                'name' => 'Test Disassembly',
+                'reference' => 'REF-OPTIONAL',
+                'slug' => 'test-disassembly',
+                'price' => 100,
+                'price_with_discount' => 80,
+                'published' => true,
+                'disassembly_id' => $disassembly->id,
+                'number_in_image' => 7,
+                'self_reference' => null,
+                'main_image' => $file,
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        expect(ProductSparePart::where('name', 'Test Disassembly')->where('number_in_image', 7)->whereNull('self_reference')->exists())->toBeTrue();
+    });
+
     it('product spare part resource has correct navigation group', function () {
-        $group = \App\Filament\Admin\Resources\Products\ProductSpareParts\ProductSparePartResource::getNavigationGroup();
+        $group = ProductSparePartResource::getNavigationGroup();
         expect($group)->toBe(__('Products'));
     });
 
     it('product spare part resource has correct model label', function () {
-        $label = \App\Filament\Admin\Resources\Products\ProductSpareParts\ProductSparePartResource::getModelLabel();
+        $label = ProductSparePartResource::getModelLabel();
         expect($label)->toBe(__('Spare parts'));
     });
 
     it('resource has index page', function () {
-        $pages = \App\Filament\Admin\Resources\Products\ProductSpareParts\ProductSparePartResource::getPages();
+        $pages = ProductSparePartResource::getPages();
         expect($pages)->toHaveKey('index');
     });
 
     it('resource has create page', function () {
-        $pages = \App\Filament\Admin\Resources\Products\ProductSpareParts\ProductSparePartResource::getPages();
+        $pages = ProductSparePartResource::getPages();
         expect($pages)->toHaveKey('create');
     });
 
     it('resource has edit page', function () {
-        $pages = \App\Filament\Admin\Resources\Products\ProductSpareParts\ProductSparePartResource::getPages();
+        $pages = ProductSparePartResource::getPages();
         expect($pages)->toHaveKey('edit');
     });
 
     it('can import product spare parts from CSV via table action', function () {
         Storage::fake('local');
         test()->actingAs(test()->admin);
-        $disassembly = \App\Models\Disassembly::factory()->create();
+        $category = Category::factory()->create();
+        $product = Product::factory()->create([
+            'category_id' => $category->id,
+        ]);
+        $disassembly = Disassembly::factory()->create([
+            'product_id' => $product->id,
+        ]);
 
         // Create a fake CSV file with correct headers and data matching ProductSparePartImporter
-        $csvContent = "ean13,name,slug,price,price_with_discount,published,disassembly\n1111111111111,Imported Spare 1,imported-spare-1,100,,true,{$disassembly->id}\n2222222222222,Imported Spare 2,imported-spare-2,200,,true,{$disassembly->id}\n";
+        $csvContent = "reference,name,number_in_image,self_reference,price,price_with_discount,published,disassembly_id\nREF-1111,Imported Spare 1,1,,100.2,80.6,1,{$disassembly->id}\nREF-2222,Imported Spare 2,2,,200,180,1,{$disassembly->id}\n";
         $fileOnDisk = UploadedFile::fake()->createWithContent('sp.csv', $csvContent);
 
         // Test the import action through Livewire
@@ -181,5 +232,8 @@ describe('ProductSparePartResource', function () {
                 'file' => $fileOnDisk,
             ])->callMountedTableAction()
             ->assertHasNoTableActionErrors();
+
+        expect(ProductSparePart::where('name', 'Imported Spare 1')->where('disassembly_id', $disassembly->id)->exists())->toBeTrue();
+        expect(ProductSparePart::where('name', 'Imported Spare 2')->where('disassembly_id', $disassembly->id)->exists())->toBeTrue();
     });
 });

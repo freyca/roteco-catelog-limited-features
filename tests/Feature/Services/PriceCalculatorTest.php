@@ -71,7 +71,7 @@ describe('PriceCalculator', function () {
     describe('Order cost calculations', function () {
         it('returns zero for empty order', function () {
             $products = collect();
-            $total = test()->calculator->getTotalCostForOrder($products);
+            $total = test()->calculator->getTotalCostForOrderWithTaxes($products);
 
             expect($total)->toBe(0.0);
         });
@@ -104,9 +104,9 @@ describe('PriceCalculator', function () {
             );
 
             $products = collect([$dto1, $dto2]);
-            $total = test()->calculator->getTotalCostForOrder($products, apply_discount: true);
+            $total = test()->calculator->getTotalCostForOrderWithTaxes($products, apply_discount: true);
 
-            expect($total)->toBe(280.0); // (80 * 2) + (40 * 3)
+            expect($total)->toBe(338.8); // ((80 * 2) + (40 * 3)) * 1.21
         });
 
         it('calculates order total without applying discounts', function () {

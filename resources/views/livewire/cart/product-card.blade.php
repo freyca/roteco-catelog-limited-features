@@ -6,20 +6,20 @@
 
             <a href="{{ $path . '/' . $product->slug }}" class="shrink-0 md:order-1">
                 <img class="mx-auto h-20 w-20 xl:h-32 xl:w-32 object-contain"
-                    src="{{ @asset('/storage/' . $product->disassembly->product->main_image) }}" alt=""
+                    src="{{ @asset('/storage/' . $related_product->main_image) }}" alt=""
                 />
             </a>
 
             <div class="ml-2 sm:ml-0 w-full min-w-0 flex-1 space-y-4 col-span-2 md:order-2 md:max-w-md">
                 <div>
-                    <a href="{{ $path . '/'}}{{$product->slug}}"
+                    <a href="{{ $path . '/'}}{{$related_product->slug}}"
                         class="text-base font-medium text-primary-900 hover:underline">
                         <p>
                             {{ $product->name }}
                         </p>
                     </a>
                     <p class="text-base text-primary-900 truncate">
-                        {{ $product->slogan }}
+                        {{ $related_product->slogan }}
                     </p>
                 </div>
             </div>

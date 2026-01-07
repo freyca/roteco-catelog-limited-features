@@ -15,21 +15,13 @@ class EloquentProductRepository implements ProductRepositoryInterface
 
     public function getAll(): LengthAwarePaginator
     {
-        $cacheKey = $this->generateCacheKey(__FUNCTION__);
-
-        // return Cache::remember($cacheKey, 3600, function () {
         return Product::paginate(16);
-        // });
     }
 
     public function featured(): LengthAwarePaginator
     {
-        $cacheKey = $this->generateCacheKey(__FUNCTION__);
+        $featured_products = config('custom.featured-products');
 
-        return Cache::remember($cacheKey, 3600, function () {
-            $featured_products = config('custom.featured-products');
-
-            return Product::whereIn('id', $featured_products)->paginate(15);
-        });
+        return Product::whereIn('id', $featured_products)->paginate(15);
     }
 }

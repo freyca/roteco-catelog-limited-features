@@ -18,7 +18,7 @@ class OrderProductDTO
 
     private ?float $price_when_user_owns_product;
 
-    private int $ean13;
+    private string $reference;
 
     private BaseProduct $product;
 
@@ -29,7 +29,7 @@ class OrderProductDTO
         private int $quantity,
         BaseProduct $product,
     ) {
-        $this->ean13 = (int) $product->ean13;
+        $this->reference = (string) $product->reference;
         $this->price_with_discount = $product->price_with_discount;
         $this->price_without_discount = $product->price;
         $this->price_when_user_owns_product = ! isset($product->price_when_user_owns_product) ? null : $product->price_when_user_owns_product;
@@ -67,9 +67,9 @@ class OrderProductDTO
         return $this->price_when_user_owns_product;
     }
 
-    public function ean13(): int
+    public function reference(): string
     {
-        return $this->ean13;
+        return $this->reference;
     }
 
     public function orderableId(): int

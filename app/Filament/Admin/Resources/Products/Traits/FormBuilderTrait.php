@@ -25,18 +25,16 @@ trait FormBuilderTrait
             TextInput::make('id')
                 ->disabled(),
 
-            TextInput::make('ean13')
-                ->label(__('Ean13'))
+            TextInput::make('reference')
+                ->label(__('Reference'))
                 ->required()
-                ->numeric(),
+                ->unique()
+                ->maxLength(255),
 
             TextInput::make('name')
                 ->label(__('Name'))
                 ->required()
                 ->maxLength(255),
-
-            TextInput::make('slug')
-                ->disabled(),
 
         ])->columns(2);
     }
@@ -46,14 +44,15 @@ trait FormBuilderTrait
         return Section::make(__('Pricing'))
             ->schema([
                 TextInput::make('price')
-                    ->label(__('Precio'))
+                    ->label(__('Price PVP'))
                     ->numeric()
                     ->suffix('€')
                     ->required(),
 
                 TextInput::make('price_with_discount')
-                    ->label(__('Price with discount'))
+                    ->label(__('Price to retailer'))
                     ->suffix('€')
+                    ->required()
                     ->numeric(),
 
             ])->columns(3);
@@ -64,14 +63,15 @@ trait FormBuilderTrait
         return Section::make(__('Pricing'))
             ->schema([
                 TextInput::make('price')
-                    ->label(__('Precio'))
+                    ->label(__('Price PVP'))
                     ->numeric()
                     ->suffix('€')
                     ->required(),
 
                 TextInput::make('price_with_discount')
-                    ->label(__('Price with discount'))
+                    ->label(__('Price to retailer'))
                     ->suffix('€')
+                    ->required()
                     ->numeric(),
 
             ])->columns(2);

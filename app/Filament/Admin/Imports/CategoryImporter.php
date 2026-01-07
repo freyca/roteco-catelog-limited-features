@@ -20,9 +20,6 @@ class CategoryImporter extends Importer
             ImportColumn::make('name')
                 ->requiredMapping()
                 ->rules(['required', 'max:255']),
-            ImportColumn::make('slug')
-                ->requiredMapping()
-                ->rules(['required', 'max:255']),
             ImportColumn::make('big_image')
                 ->requiredMapping()
                 ->rules(['required', 'max:255']),
@@ -31,14 +28,13 @@ class CategoryImporter extends Importer
 
     public function resolveRecord(): Category
     {
-        // Use find for id, fallback to slug
         if (isset($this->data['id'])) {
             $record = Category::find($this->data['id']);
             if ($record) {
                 return $record;
             }
         }
-        return Category::firstOrNew(['slug' => $this->data['slug']]);
+        return Category::firstOrNew(['name' => $this->data['name']]);
     }
 
     public static function getCompletedNotificationBody(Import $import): string

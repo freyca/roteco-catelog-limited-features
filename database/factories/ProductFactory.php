@@ -27,7 +27,7 @@ class ProductFactory extends Factory
         return [
             'name' => $name,
             'slug' => str()->slug($name),
-            'ean13' => fake()->unique()->ean13(),
+            'reference' => fake()->unique()->bothify('REF-########'),
             // 'price' => $price,
             // 'price_with_discount' => $this->isProductDiscounted($price),
             'published' => fake()->boolean(75),

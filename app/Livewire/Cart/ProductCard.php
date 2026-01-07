@@ -17,6 +17,8 @@ class ProductCard extends Component
 
     public BaseProduct $product;
 
+    public BaseProduct $related_product;
+
     public string $path;
 
     public int $quantity;
@@ -25,9 +27,10 @@ class ProductCard extends Component
     {
         $this->product = $order_product->getProduct();
         $this->quantity = $order_product->quantity();
+        $this->related_product = $this->product->disassembly->product;
+
 
         $this->path = match (true) {
-            get_class($this->product) === 'App\Models\ProductSparePart' => '/pieza-de-repuesto',
             default => '/producto',
         };
     }

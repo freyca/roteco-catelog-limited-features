@@ -116,7 +116,7 @@ class SessionCartRepository implements CartRepositoryInterface
     {
         $order_products = $this->getCart();
 
-        $total = $this->price_calculator->getTotalCostForOrder($order_products);
+        $total = $this->price_calculator->getTotalCostForOrderWithTaxes($order_products);
 
         return $formatted ? $this->formatCurrency($total) : $total;
     }
@@ -220,7 +220,7 @@ class SessionCartRepository implements CartRepositoryInterface
         });
 
         if ($match->count() !== 1) {
-            throw new Exception('Found '.$match->count().' matches of product in cart');
+            throw new Exception('Found ' . $match->count() . ' matches of product in cart');
         }
 
         $key = $match->keys()->first();

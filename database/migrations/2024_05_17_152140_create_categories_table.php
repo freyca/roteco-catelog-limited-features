@@ -18,6 +18,7 @@ return new class extends Migration
             // $table->string('meta_description');
             // $table->text('description')->nullable();
             $table->string('big_image');
+            $table->boolean('published')->default(false);
             // $table->string('small_image');
             $table->timestamps();
         });

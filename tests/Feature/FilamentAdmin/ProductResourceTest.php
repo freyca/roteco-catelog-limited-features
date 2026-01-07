@@ -50,7 +50,7 @@ describe('ProductResource', function () {
         $component->fillForm([
             'name' => 'New Product',
             'slug' => 'new-product',
-            'ean13' => '1234567890123',
+            'reference' => 'REF-12345678',
             'category_id' => $category->id,
             'main_image' => $file,
             'disassemblies' => [],
@@ -67,19 +67,19 @@ describe('ProductResource', function () {
         $component->assertHasFormErrors(['name' => 'required']);
     });
 
-    it('validates ean13 is required on create', function () {
+    it('validates reference is required on create', function () {
         test()->actingAs(test()->admin);
         $category = Category::factory()->create();
 
         Livewire::test(CreateProduct::class)
             ->fillForm([
                 'name' => 'Test Product',
-                'ean13' => '',
+                'reference' => '',
                 'category_id' => $category->id,
                 'main_image' => ['product.jpg'],
             ])
             ->call('create')
-            ->assertHasFormErrors(['ean13' => 'required']);
+            ->assertHasFormErrors(['reference' => 'required']);
     });
 
     it('validates category_id is required on create', function () {
@@ -88,7 +88,7 @@ describe('ProductResource', function () {
         Livewire::test(CreateProduct::class)
             ->fillForm([
                 'name' => 'Test Product',
-                'ean13' => '1234567890123',
+                'reference' => 'REF-12345678',
                 'category_id' => null,
                 'main_image' => ['product.jpg'],
             ])
@@ -103,7 +103,7 @@ describe('ProductResource', function () {
         Livewire::test(CreateProduct::class)
             ->fillForm([
                 'name' => 'Test Product',
-                'ean13' => '1234567890123',
+                'reference' => 'REF-12345678',
                 'category_id' => $category->id,
                 'main_image' => null,
             ])
@@ -160,7 +160,7 @@ describe('ProductResource', function () {
         $category = Category::factory()->create();
 
         // Create a fake CSV file with correct headers and data matching ProductImporter
-        $csvContent = "ean13,name,slug,published,main_image,category\n1234567890001,Imported Product 1,imported-product-1,1,product1.jpg,{$category->id}\n1234567890002,Imported Product 2,imported-product-2,1,product2.jpg,{$category->id}\n";
+        $csvContent = "reference,name,published,main_image,category\nREF-0001,Imported Product 1,1,product1.jpg,{$category->id}\nREF-0002,Imported Product 2,1,product2.jpg,{$category->id}\n";
         $fileOnDisk = UploadedFile::fake()->createWithContent('prod.csv', $csvContent);
 
         // Test the import action through Livewire (queue processes synchronously by default in tests)
@@ -170,5 +170,8 @@ describe('ProductResource', function () {
                 'file' => $fileOnDisk,
             ])->callMountedTableAction()
             ->assertHasNoTableActionErrors();
+
+        expect(Product::where('name', 'Imported Product 1')->where('main_image', 'product1.jpg')->where('category_id', $category->id)->exists())->toBeTrue();
+        expect(Product::where('name', 'Imported Product 2')->where('main_image', 'product2.jpg')->where('category_id', $category->id)->exists())->toBeTrue();
     });
 });

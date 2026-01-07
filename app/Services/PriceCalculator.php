@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DTO\OrderProductDTO;
-use App\Models\Product;
 use Illuminate\Support\Collection;
 
 class PriceCalculator
@@ -41,7 +40,7 @@ class PriceCalculator
     /**
      * @paran Collection<int, OrderProductDTO> $order_products
      */
-    public function getTotalCostForOrder(Collection $order_products, bool $apply_discount = true): float
+    private function getTotalCostForOrder(Collection $order_products, bool $apply_discount = true): float
     {
         $total = 0;
 
@@ -69,6 +68,11 @@ class PriceCalculator
 
     public function getTotalCostForOrderWithoutTaxes(Collection $order_products): float
     {
-        return $this->getTotalCostForOrder($order_products) * (1 - config('custom.tax_iva'));
+        return $this->getTotalCostForOrder($order_products);
+    }
+
+    public function getTotalCostForOrderWithTaxes(Collection $order_products, bool $apply_discount = true): float
+    {
+        return $this->getTotalCostForOrder($order_products, $apply_discount) * (1 + config('custom.tax_iva'));
     }
 }

@@ -131,7 +131,7 @@ describe('Cart Service', function () {
 
             $cost = test()->cart->getTotalCost();
 
-            expect($cost)->toBe(200.0); // 160 + 40
+            expect($cost)->toBe(200.0 * (1 + config('custom.tax_iva'))); // (160 + 40) * 1.21
         });
 
         it('calculates total cost without discount', function () {
@@ -172,8 +172,7 @@ describe('Cart Service', function () {
 
             $cost = test()->cart->getTotalCostWithoutTaxes();
 
-            $tax_rate = config('custom.tax_iva');
-            expect($cost)->toBe(160.0 * (1 - $tax_rate));
+            expect($cost)->toBe(160.0);
         });
 
         it('gets formatted total cost', function () {
@@ -187,7 +186,7 @@ describe('Cart Service', function () {
             $cost = test()->cart->getTotalCost(true);
 
             // Should be formatted as currency
-            $expected = CurrencyFormatter::formatCurrency(160.0);
+            $expected = CurrencyFormatter::formatCurrency(160.0 * (1 + config('custom.tax_iva')));
             expect($cost)->toBe($expected);
         });
     });
@@ -258,7 +257,7 @@ describe('Cart Service', function () {
             test()->cart->add($product2, 1);
 
             expect(test()->cart->getTotalQuantity())->toBe(3);
-            expect(test()->cart->getTotalCost())->toBe(200.0); // 160 + 40
+            expect(test()->cart->getTotalCost())->toBe(200.0 * (1 + config('custom.tax_iva'))); // (160 + 40) * 1.21
         });
     });
 });

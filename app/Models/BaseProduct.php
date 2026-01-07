@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property int $id
- * @property int $ean13
+ * @property string $reference
  * @property string $slug
  * @property string $name
  * @property float $price
@@ -40,7 +40,7 @@ abstract class BaseProduct extends Model
 
     protected $fillable = [
         'name',
-        'ean13',
+        'reference',
         'slug',
         'price',
         'price_with_discount',

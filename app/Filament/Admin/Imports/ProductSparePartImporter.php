@@ -17,31 +17,32 @@ class ProductSparePartImporter extends Importer
     public static function getColumns(): array
     {
         return [
-            ImportColumn::make('ean13')
+            ImportColumn::make('reference')
                 ->requiredMapping()
-                ->numeric()
-                ->rules(['required', 'integer']),
+                ->rules(['required', 'max:255']),
             ImportColumn::make('name')
                 ->requiredMapping()
                 ->rules(['required', 'max:255']),
-            ImportColumn::make('slug')
-                ->requiredMapping()
-                ->rules(['required', 'max:255']),
+            ImportColumn::make('number_in_image')
+                ->numeric()
+                ->rules(['required', 'integer']),
+            ImportColumn::make('self_reference')
+                ->rules(['nullable', 'max:255']),
             ImportColumn::make('price')
                 ->requiredMapping()
                 ->numeric()
-                ->rules(['required', 'integer']),
+                ->rules(['required', 'numeric']),
             ImportColumn::make('price_with_discount')
                 ->numeric()
-                ->rules(['integer']),
+                ->rules(['numeric', 'required']),
             ImportColumn::make('published')
                 ->requiredMapping()
                 ->boolean()
                 ->rules(['required', 'boolean']),
-            ImportColumn::make('disassembly')
+            ImportColumn::make('disassembly_id')
                 ->requiredMapping()
-                ->relationship()
-                ->rules(['required']),
+                ->numeric()
+                ->rules(['required', 'integer', 'exists:disassemblies,id']),
         ];
     }
 
@@ -53,9 +54,9 @@ class ProductSparePartImporter extends Importer
                 return $record;
             }
         }
-        // Fallback to ean13 as unique key
+        // Fallback to reference as unique key
         return ProductSparePart::firstOrNew([
-            'ean13' => $this->data['ean13'],
+            'reference' => $this->data['reference'],
         ]);
     }
 
